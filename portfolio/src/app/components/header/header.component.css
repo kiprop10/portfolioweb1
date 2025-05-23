@@ -1,4 +1,11 @@
-
-  .header {
-    margin-bottom: 0.5rem;
-  }
+header {
+  width: 100%;
+  background: #343a40;
+  color: #fff;
+  margin-bottom: 0.5rem; /* Space below header */
+}
+.header-title {
+  font-family: 'lato';
+  font-weight: 700;
+  letter-spacing: 1px;
+}

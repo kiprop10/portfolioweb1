@@ -1,1 +1,16 @@
-<p>home works!</p>
+<div class="container text-center mt-5">
+  <img [src]="profileimage" alt="Profile" width="150" class="rounded-circle mb-3" *ngIf="profileimage">
+  <h1>{{ name }}</h1>
+  <h3>{{ description }}</h3>
+  <p>{{ intro }}</p>
+
+  <h4 class="mt-4">Skills</h4>
+  <ul class="list-inline">
+    <li class="list-inline-item" *ngFor="let skill of skills">
+      <i [class]="skill.icon" style="font-size: 2rem;"></i>
+      <div>{{ skill.name }}</div>
+    </li>
+  </ul>
+
+  <a routerLink="/portfolio" class="btn btn-primary mt-3">See My Work</a>
+</div>
