@@ -1,16 +1,14 @@
-<div class="container text-center mt-5">
-  <img [src]="profileimage" alt="Profile" width="150" class="rounded-circle mb-3" *ngIf="profileimage">
-  <h1>{{ name }}</h1>
-  <h3>{{ description }}</h3>
-  <p>{{ intro }}</p>
+<section class="home-section">
+  <div class="home-text">
+    <h1>Hello, I'm Kiprop Mutai</h1>
+    <p>
+      I’m a passionate software engineer specializing in building dynamic, responsive, and efficient web applications.
+      My goal is to turn ideas into scalable digital solutions with a clean user experience.
+    </p>
+    <a routerLink="/portfolio" class="btn">See My Work</a>
+  </div>
 
-  <h4 class="mt-4">Skills</h4>
-  <ul class="list-inline">
-    <li class="list-inline-item" *ngFor="let skill of skills">
-      <i [class]="skill.icon" style="font-size: 2rem;"></i>
-      <div>{{ skill.name }}</div>
-    </li>
-  </ul>
-
-  <a routerLink="/portfolio" class="btn btn-primary mt-3">See My Work</a>
-</div>
+  <div class="home-image">
+    <img src="assets/images/profile1.jpg" alt="Kiprop Mutai profile photo" loading="lazy" />
+  </div>
+</section>

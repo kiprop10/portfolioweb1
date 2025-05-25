@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './components/nav/nav.component';
 import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,8 @@ import { HeaderComponent } from './components/header/header.component';
     RouterOutlet,
     NavComponent,
     HeaderComponent,
+    FooterComponent,
+    
     // No need to import RouterLink or RouterLinkActive here unless you use them directly in this component's template
   ],
   templateUrl: './app.component.html',
