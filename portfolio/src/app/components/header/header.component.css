@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&display=swap');
 
 .custom-header {
-  background-image: url('/assets/images/profile1.jpg');
+  background-image: url('images/profile1.jpg');
   background-size: cover;
   background-position: center;
   height: 300px;
