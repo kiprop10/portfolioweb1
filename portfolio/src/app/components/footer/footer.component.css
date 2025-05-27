@@ -60,16 +60,34 @@
   justify-content: flex-end;
 }
 
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #232323;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0 4px;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.footer-social a:hover {
+  background: #ffd70022;
+  box-shadow: 0 4px 16px #ffd70044;
+}
+
 .footer-social img {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   filter: brightness(0) invert(1);
   transition: transform 0.2s, filter 0.2s;
 }
 
-.footer-social img:hover {
+.footer-social a:hover img {
   transform: scale(1.15);
-  filter: brightness(0.8) invert(0.7) sepia(1) hue-rotate(180deg);
+  filter: brightness(0.8) sepia(1) hue-rotate(180deg) saturate(2);
 }
 
 .footer-bottom {
