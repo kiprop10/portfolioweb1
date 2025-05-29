@@ -1,1 +1,37 @@
-<p>portfolio works!</p>
+<section class="portfolio-section">
+  <h2 class="portfolio-title">My Projects</h2>
+  <div class="portfolio-list">
+    <div class="portfolio-card" *ngFor="let project of projects">
+      <img [src]="project.image" [alt]="project.title + ' screenshot'" class="portfolio-image" />
+      <div class="portfolio-info">
+        <h3>{{ project.title }}</h3>
+        <p class="portfolio-desc">
+          {{ project.showFull ? project.description : (project.description | slice:0:120) + (project.description.length > 120 ? '...' : '') }}
+        </p>
+        <div class="portfolio-actions">
+          <a [href]="project.url" target="_blank" class="btn btn-primary">Explore More</a>
+          <button class="btn btn-outline-secondary" (click)="project.showFull = !project.showFull">
+            {{ project.showFull ? 'Show Less' : 'Read More' }}
+          </button>
+        </div>
+        <!-- Comment Section -->
+        <div class="portfolio-comments">
+          <form (ngSubmit)="sendComment(project)" #commentForm="ngForm">
+            <input
+              type="text"
+              name="comment"
+              [(ngModel)]="project.newComment"
+              placeholder="Leave a comment..."
+              required
+              class="comment-input"
+            />
+            <button type="submit" class="btn btn-comment" [disabled]="!project.newComment">Send</button>
+          </form>
+          <div *ngIf="project.commentSent" class="comment-sent-msg">
+            Thank you! Your comment has been sent.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

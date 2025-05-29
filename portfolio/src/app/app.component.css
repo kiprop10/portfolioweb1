@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.main-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  overflow: auto;
+}
+
+/* Ensure footer never overlaps and shrinks only as needed */
+app-footer, .footer {
+  flex-shrink: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Responsive: reduce footer padding/margin on mobile */
+@media (max-width: 600px) {
+  app-footer, .footer {
+    padding: 1rem 0 0 0 !important;
+    font-size: 0.95rem !important;
+    height: 1% !important;
+    margin-bottom: 0 !important;
+  }
+}
