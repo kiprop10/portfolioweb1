@@ -1,7 +1,12 @@
-
-.nav {
+:host {
   width: 100%;
   background: #222;
   color: #fff;
-  padding: 1rem 0;
+  padding: 1rem 0; /* Adjust if your header is taller/shorter */
+  z-index: 999;
+}
+.active {
+  border-bottom: 2px solid #fff;
+  font-weight: bold;
+          
 }

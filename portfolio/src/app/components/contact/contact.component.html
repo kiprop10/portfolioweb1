@@ -1,1 +1,29 @@
-<p>contact works!</p>
+<section class="contact-section">
+  <h2>Contact Me</h2>
+<div class="contact-links">
+    <a href="https://www.facebook.com/profile.php?id=100089092638023" target="_blank" aria-label="Facebook">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="width:32px;height:32px;" />
+    </a>
+    <a href="https://www.linkedin.com/in/mutai10?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" aria-label="LinkedIn">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="width:32px;height:32px;" />
+    </a>
+    <a href="mailto:ezramutai10@gmail.com" aria-label="Gmail">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Gmail" style="width:32px;height:32px;" />
+    </a>
+    <a href="https://github.com/ezramutai" target="_blank" aria-label="GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" style="width:32px;height:32px;" />
+    </a>
+</div>
+  <form class="contact-form" (ngSubmit)="sendMessage()" #contactForm="ngForm">
+    <textarea
+      name="message"
+      [(ngModel)]="message"
+      placeholder="Type your message here..."
+      required
+      rows="4"
+      class="contact-input"
+    ></textarea>
+    <button type="submit" class="btn btn-primary" [disabled]="!message">Send Message</button>
+    <div *ngIf="messageSent" class="contact-success">Thank you! Your message has been sent.</div>
+  </form>
+</section>
