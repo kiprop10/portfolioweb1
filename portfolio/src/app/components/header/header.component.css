@@ -1,0 +1,67 @@
+/* Import a fancy serif font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&display=swap');
+
+/* Sticky header with background */
+.custom-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-image: url('/images/profile1.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  width: 100%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+
+/* Fancy header title */
+.header-title-link {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Optional: add margin-top to next section */
+main {
+  margin-top: 1rem;
+}
+/* Link styled as header title */
+.header-title-link {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-title-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: underline;
+  color: #e2e2e2;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .custom-header {
+    height: 200px;
+  }
+
+  .header-title-link {
+    font-size: 2.2rem;
+    padding: 0.5rem 1rem;
+  }
+}
