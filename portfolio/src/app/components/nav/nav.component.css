@@ -1,12 +1,70 @@
-:host {
-  width: 100%;
-  background: #222;
-  color: #fff;
-  padding: 1rem 0; /* Adjust if your header is taller/shorter */
-  z-index: 999;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
+nav {
+  background: lightgrey;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.08);
+  padding: 1.2rem 0;
 }
-.active {
-  border-bottom: 2px solid #fff;
-  font-weight: bold;
-          
+
+.nav-list {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list a {
+  font-family: 'Montserrat', Arial, sans-serif;
+  color: black;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.18rem;
+  letter-spacing: 0.03em;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.04);
+}
+
+.nav-list a:hover {
+  background: #fff;
+  color: #4f46e5;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+}
+
+.nav-list a.active {
+  color: #fff;
+  background: #4f46e5;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+/* Responsive styles */
+@media (max-width: 800px) {
+  .nav-list {
+    gap: 1.2rem;
+  }
+  .nav-list a {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  nav {
+    padding: 0.5rem 0;
+  }
+  .nav-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nav-list a {
+    width: 90vw;
+    text-align: center;
+    font-size: 1.05rem;
+    padding: 0.7rem 0;
+    border-radius: 0.7rem;
+  }
 }

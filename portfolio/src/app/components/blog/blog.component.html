@@ -1,0 +1,51 @@
+<div *ngFor="let blog of blogs" class="blog-card">
+  <img [src]="blog.image" [alt]="blog.title" class="blog-image" />
+  <h3 class="blog-headline">{{ blog.title }}</h3>
+  <p class="blog-snippet" *ngIf="!blog.showFull">{{ blog.snippet }}</p>
+  <p class="blog-full" *ngIf="blog.showFull">{{ blog.content }}</p>
+  <button class="read-more-btn" (click)="toggleBlog(blog)">
+    {{ blog.showFull ? 'Show Less' : 'Read More' }}
+  </button>
+  <div class="comment-section" *ngIf="blog.showFull">
+    <form (ngSubmit)="postComment(blog)" #commentForm="ngForm">
+      <input type="text" name="comment" [(ngModel)]="blog.newComment" placeholder="Write a comment..." required />
+      <div class="platform-select">
+        <span
+          *ngFor="let platform of platforms"
+          class="platform-icon"
+          [ngClass]="{'selected': blog.selectedPlatform === platform.value}"
+          (click)="selectPlatform(blog, platform.value)"
+          [title]="platform.name"
+        >
+          <i [class]="platform.icon"></i>
+        </span>
+      </div>
+      <div class="comment-btn-row">
+        <button type="submit" [disabled]="!blog.selectedPlatform">Post Comment</button>
+      </div>
+    </form>
+    <ul class="comments-list">
+      <li *ngFor="let comment of blog.comments; let i = index">
+        <span class="platform-icon">
+          <i *ngIf="comment.platform === 'facebook'" class="fab fa-facebook"></i>
+          <i *ngIf="comment.platform === 'instagram'" class="fab fa-instagram"></i>
+          <i *ngIf="comment.platform === 'twitter'" class="fab fa-twitter"></i>
+        </span>
+        <span *ngIf="!comment.showFull && comment.text.length > 80">
+          {{ comment.text | slice:0:80 }}...
+          <a class="show-more" (click)="comment.showFull = true">Show More</a>
+        </span>
+        <span *ngIf="comment.showFull || comment.text.length <= 80">
+          {{ comment.text }}
+          <a *ngIf="comment.text.length > 80" class="show-more" (click)="comment.showFull = false">Show Less</a>
+        </span>
+        <button class="delete-btn" (click)="deleteComment(blog, i)" title="Delete comment">
+          <i class="fas fa-trash"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="popup" *ngIf="showPopup">
+  Comment posted successfully!
+</div>
