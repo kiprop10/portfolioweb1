@@ -1,11 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
 
 nav {
-  background: lightgrey;
+  background: #f3f4f6;
   box-shadow: 0 2px 12px rgba(99, 102, 241, 0.08);
   padding: 1.2rem 0;
+  position: relative;
 }
 
+/* Hamburger menu button */
+.nav-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #222;
+  font-size: 2rem;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  z-index: 102;
+  cursor: pointer;
+}
+
+/* Icon bar for mobile */
+.icon-bar {
+  display: none;
+}
+
+.icon-bar-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100vw;
+  background: #f3f4f6;
+  padding: 0.4rem 0;
+  margin: 0;
+  list-style: none;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+  z-index: 101;
+}
+
+.icon-bar-list li {
+  flex: 1 1 0;
+  text-align: center;
+}
+
+.icon-bar-list a {
+  color: #222;
+  font-size: 1.5rem;
+  padding: 0.3rem 0;
+  display: inline-block;
+  transition: color 0.2s, background 0.2s;
+  border-radius: 0.5rem;
+}
+
+.icon-bar-list a.active,
+.icon-bar-list a:focus,
+.icon-bar-list a:hover {
+  color: #4f46e5;
+  background: #e5e7eb;
+}
+
+/* Main nav list */
 .nav-list {
   display: flex;
   justify-content: center;
@@ -13,11 +70,19 @@ nav {
   list-style: none;
   margin: 0;
   padding: 0;
+  background: #f3f4f6;
+  transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+  position: relative;
+  z-index: 100;
+}
+
+.nav-list li {
+  width: auto;
 }
 
 .nav-list a {
   font-family: 'Montserrat', Arial, sans-serif;
-  color: black;
+  color: #222;
   text-decoration: none;
   font-weight: 600;
   font-size: 1.18rem;
@@ -26,11 +91,15 @@ nav {
   border-radius: 0.5rem;
   transition: color 0.2s, background 0.2s, box-shadow 0.2s;
   box-shadow: 0 1px 4px rgba(99, 102, 241, 0.04);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
 }
 
 .nav-list a:hover {
-  background: #fff;
-  color: #4f46e5;
+  background: #e5e7eb;
+  color: #111;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
 }
 
@@ -41,30 +110,74 @@ nav {
 }
 
 /* Responsive styles */
-@media (max-width: 800px) {
-  .nav-list {
-    gap: 1.2rem;
-  }
-  .nav-list a {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-  }
-}
-
 @media (max-width: 600px) {
   nav {
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 0 0;
+  }
+  .nav-menu-btn {
+    display: block;
+  }
+  .icon-bar {
+    display: block;
   }
   .nav-list {
     flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    align-items: flex-start;
+    gap: 0;
+    background: #f3f4f6;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100vw;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.10);
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    z-index: 100;
+    transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+  }
+  .nav-list.open {
+    max-height: 500px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-list li {
+    width: 100%;
   }
   .nav-list a {
-    width: 90vw;
-    text-align: center;
+    width: 100%;
+    text-align: left;
     font-size: 1.05rem;
-    padding: 0.7rem 0;
-    border-radius: 0.7rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .nav-list a:hover {
+    background: #e5e7eb;
+    color: #111;
+  }
+  /* Hide icon bar when menu is open */
+  .icon-bar {
+    display: block;
+  }
+  .icon-bar.hide {
+    display: none !important;
+  }
+}
+
+/* Hide menu button on desktop */
+@media (min-width: 601px) {
+  .nav-menu-btn {
+    display: none;
+  }
+  .icon-bar {
+    display: none !important;
   }
 }
