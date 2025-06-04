@@ -30,7 +30,8 @@ export class BlogComponent {
   platforms = [
     { name: 'Facebook', icon: 'fab fa-facebook', value: 'facebook' },
     { name: 'Instagram', icon: 'fab fa-instagram', value: 'instagram' },
-    { name: 'Twitter', icon: 'fab fa-twitter', value: 'twitter' }
+    { name: 'Twitter', icon: 'fab fa-twitter', value: 'twitter' },
+    { name: 'Messages', icon: 'fas fa-comment-dots', value: 'messages' }
   ];
 
   blogs: Blog[] = [
@@ -44,10 +45,12 @@ export class BlogComponent {
       selectedPlatform: '',
       comments: []
     },
-    // Add more blog objects here
+    // Add more blog objects here if needed
   ];
 
   showPopup = false;
+  showSharePopup = false;
+  shareData = { text: '', platform: '', blog: null as Blog | null, commentIndex: -1 };
 
   toggleBlog(blog: Blog) {
     blog.showFull = !blog.showFull;
@@ -66,20 +69,6 @@ export class BlogComponent {
       });
       this.saveComments();
 
-      // Prefill and open the platform
-      const text = encodeURIComponent(blog.newComment + ' - ' + blog.title);
-      let url = '';
-      if (blog.selectedPlatform === 'facebook') {
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}&quote=${text}`;
-      } else if (blog.selectedPlatform === 'twitter') {
-        url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(location.href)}`;
-      } else if (blog.selectedPlatform === 'instagram') {
-        url = `https://www.instagram.com/`;
-      }
-      if (url) {
-        window.open(url, '_blank');
-      }
-
       blog.newComment = '';
       blog.selectedPlatform = '';
       this.showPopup = true;
@@ -90,6 +79,41 @@ export class BlogComponent {
   deleteComment(blog: Blog, index: number) {
     blog.comments.splice(index, 1);
     this.saveComments();
+  }
+
+  openSharePopup(blog: Blog, comment: BlogComment) {
+    this.shareData = {
+      text: comment.text,
+      platform: comment.platform,
+      blog,
+      commentIndex: blog.comments.indexOf(comment)
+    };
+    this.showSharePopup = true;
+  }
+
+  closeSharePopup() {
+    this.showSharePopup = false;
+    this.shareData = { text: '', platform: '', blog: null, commentIndex: -1 };
+  }
+
+  confirmShare() {
+    const text = encodeURIComponent(this.shareData.text);
+    let url = '';
+    if (this.shareData.platform === 'facebook') {
+      url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}&quote=${text}`;
+    } else if (this.shareData.platform === 'twitter') {
+      url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(location.href)}`;
+    } else if (this.shareData.platform === 'instagram') {
+      url = `https://www.instagram.com/`;
+    } else if (this.shareData.platform === 'messages') {
+      url = `sms:?body=${text}`;
+    }
+    if (url) {
+      window.open(url, '_blank');
+    }
+    this.closeSharePopup();
+    this.showPopup = true;
+    setTimeout(() => this.showPopup = false, 2000);
   }
 
   saveComments() {

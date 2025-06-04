@@ -7,8 +7,23 @@
     {{ blog.showFull ? 'Show Less' : 'Read More' }}
   </button>
   <div class="comment-section" *ngIf="blog.showFull">
-    <form (ngSubmit)="postComment(blog)" #commentForm="ngForm">
-      <input type="text" name="comment" [(ngModel)]="blog.newComment" placeholder="Write a comment..." required />
+    <form (ngSubmit)="postComment(blog)" #commentForm="ngForm" class="comment-form-row">
+      <input
+        type="text"
+        name="comment"
+        [(ngModel)]="blog.newComment"
+        placeholder="Write a comment..."
+        required
+      />
+      <!-- Send icon button -->
+      <button
+        type="submit"
+        [disabled]="!blog.selectedPlatform || !blog.newComment"
+        class="send-btn"
+        title="Send"
+      >
+        <i class="fas fa-paper-plane"></i>
+      </button>
       <div class="platform-select">
         <span
           *ngFor="let platform of platforms"
@@ -20,9 +35,6 @@
           <i [class]="platform.icon"></i>
         </span>
       </div>
-      <div class="comment-btn-row">
-        <button type="submit" [disabled]="!blog.selectedPlatform">Post Comment</button>
-      </div>
     </form>
     <ul class="comments-list">
       <li *ngFor="let comment of blog.comments; let i = index">
@@ -30,6 +42,7 @@
           <i *ngIf="comment.platform === 'facebook'" class="fab fa-facebook"></i>
           <i *ngIf="comment.platform === 'instagram'" class="fab fa-instagram"></i>
           <i *ngIf="comment.platform === 'twitter'" class="fab fa-twitter"></i>
+          <i *ngIf="comment.platform === 'messages'" class="fas fa-comment-dots"></i>
         </span>
         <span *ngIf="!comment.showFull && comment.text.length > 80">
           {{ comment.text | slice:0:80 }}...
@@ -42,10 +55,48 @@
         <button class="delete-btn" (click)="deleteComment(blog, i)" title="Delete comment">
           <i class="fas fa-trash"></i>
         </button>
+        <!-- Share icon button -->
+        <button
+          class="share-btn"
+          title="Share comment"
+          (click)="openSharePopup(blog, comment)"
+        >
+          <i class="fas fa-share"></i>
+        </button>
       </li>
     </ul>
   </div>
 </div>
-<div class="popup" *ngIf="showPopup">
+
+<!-- Share popup -->
+<div class="popup" *ngIf="showSharePopup">
+  <h4>Share Comment</h4>
+  <form (ngSubmit)="confirmShare()">
+    <input
+      type="text"
+      [(ngModel)]="shareData.text"
+      name="shareText"
+      required
+    />
+    <div class="platform-select">
+      <span
+        *ngFor="let platform of platforms"
+        class="platform-icon"
+        [ngClass]="{'selected': shareData.platform === platform.value}"
+        (click)="shareData.platform = platform.value"
+        [title]="platform.name"
+      >
+        <i [class]="platform.icon"></i>
+      </span>
+    </div>
+    <div class="popup-actions">
+      <button type="submit" [disabled]="!shareData.platform">Share</button>
+      <button type="button" (click)="closeSharePopup()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<!-- Success toast -->
+<div class="toast-popup" *ngIf="showPopup">
   Comment posted successfully!
 </div>

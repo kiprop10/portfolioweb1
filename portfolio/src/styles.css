@@ -7,17 +7,13 @@ html, body {
 
 body, app-root {
   min-height: 100vh;
-<<<<<<< HEAD
   width: 100vw;
-=======
   min-width: 100vw;
->>>>>>> kiprop/main
   display: flex;
   flex-direction: column;
 }
 
 .main-content {
-<<<<<<< HEAD
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
@@ -26,7 +22,6 @@ body, app-root {
   min-height: 0;
   width: 100%;
 
-=======
   flex: 1 0 auto;
   overflow: auto;
   display: flex;
@@ -51,5 +46,4 @@ body, app-root {
     padding: 1rem 0 0.5rem 0;
     font-size: 0.95rem;
   }
->>>>>>> kiprop/main
 }
