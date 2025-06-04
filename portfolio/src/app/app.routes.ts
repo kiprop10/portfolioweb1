@@ -5,6 +5,10 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { ServicesComponent } from './components/services/services.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+<<<<<<< HEAD
+=======
+import { BlogComponent } from './components/blog/blog.component';
+>>>>>>> kiprop/main
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -12,6 +16,10 @@ export const routes: Routes = [
     { path: 'portfolio', component: PortfolioComponent },
     { path: 'services', component: ServicesComponent },
     { path: 'contact', component: ContactComponent },
+<<<<<<< HEAD
+=======
+    { path: 'blog', component: BlogComponent},
+>>>>>>> kiprop/main
     { path:"**", component: NotfoundComponent}
 
 ];

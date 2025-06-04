@@ -9,5 +9,20 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
+<<<<<<< HEAD
 
 }
+=======
+  menuOpen = false;
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenuWithDelay() {
+    setTimeout(() => {
+      this.menuOpen = false;
+    }, 3000);
+  }
+}
+>>>>>>> kiprop/main
