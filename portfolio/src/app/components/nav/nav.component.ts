@@ -9,10 +9,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
-<<<<<<< HEAD
-
-}
-=======
   menuOpen = false;
 
   toggleMenu() {
@@ -25,4 +21,3 @@ export class NavComponent {
     }, 3000);
   }
 }
->>>>>>> kiprop/main

@@ -1,18 +1,13 @@
-<<<<<<< HEAD
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
+
 :host {
   width: 100%;
   background: #222;
   color: #fff;
-  padding: 1rem 0; /* Adjust if your header is taller/shorter */
+  padding: 1rem 0;
   z-index: 999;
 }
-.active {
-  border-bottom: 2px solid #fff;
-  font-weight: bold;
-          
-=======
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
 
 nav {
   background: #f3f4f6;
@@ -21,7 +16,6 @@ nav {
   position: relative;
 }
 
-/* Hamburger menu button */
 .nav-menu-btn {
   display: none;
   background: none;
@@ -35,7 +29,6 @@ nav {
   cursor: pointer;
 }
 
-/* Icon bar for mobile */
 .icon-bar {
   display: none;
 }
@@ -75,14 +68,13 @@ nav {
   background: #e5e7eb;
 }
 
-/* Main nav list */
 .nav-list {
   display: flex;
   justify-content: center;
-  gap: 2.5rem;
+  gap: 1.5rem;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 1rem;
   background: #f3f4f6;
   transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
   position: relative;
@@ -122,7 +114,11 @@ nav {
   box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
 }
 
-/* Responsive styles */
+.active {
+  border-bottom: 2px solid #fff;
+  font-weight: bold;
+}
+
 @media (max-width: 600px) {
   nav {
     padding: 0.5rem 0 0 0;
@@ -176,7 +172,6 @@ nav {
     background: #e5e7eb;
     color: #111;
   }
-  /* Hide icon bar when menu is open */
   .icon-bar {
     display: block;
   }
@@ -185,7 +180,6 @@ nav {
   }
 }
 
-/* Hide menu button on desktop */
 @media (min-width: 601px) {
   .nav-menu-btn {
     display: none;
@@ -193,5 +187,4 @@ nav {
   .icon-bar {
     display: none !important;
   }
->>>>>>> kiprop/main
 }
