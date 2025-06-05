@@ -1,22 +1,27 @@
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface BlogComment {
   text: string;
   platform: string;
-  showFull?: boolean;
+  author: string;
+  date: Date;
+  showMenu: boolean;
 }
 
 interface Blog {
+  id: string;
   title: string;
-  image: string;
-  snippet: string;
+  imageUrl: string;
+  summary: string;
   content: string;
-  showFull: boolean;
-  newComment: string;
-  selectedPlatform: string;
+  expanded: boolean;
+  newCommentText: string;
+  referralSource: string;
+  askReferral: boolean;
   comments: BlogComment[];
+  showPopup?: boolean; // For per-blog toast
 }
 
 @Component({
@@ -26,7 +31,9 @@ interface Blog {
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css']
 })
-export class BlogComponent {
+export class BlogComponent implements OnInit {
+  currentUser = 'alice@example.com';
+
   platforms = [
     { name: 'Facebook', icon: 'fab fa-facebook', value: 'facebook' },
     { name: 'Instagram', icon: 'fab fa-instagram', value: 'instagram' },
@@ -34,51 +41,93 @@ export class BlogComponent {
     { name: 'Messages', icon: 'fas fa-comment-dots', value: 'messages' }
   ];
 
+  showSharePopup = false;
+  shareData = {
+    text: '',
+    platform: '',
+    blog: null as Blog | null,
+    commentIndex: -1
+  };
+
   blogs: Blog[] = [
     {
+      id: '1',
       title: 'First Blog Post',
-      image: 'https://via.placeholder.com/400x200',
-      snippet: 'This is a short summary of the first blog post...',
+      imageUrl: 'https://via.placeholder.com/400x200',
+      summary: 'This is a short summary of the first blog post...',
       content: 'This is the full content of the first blog post. It can be as long as I want.',
-      showFull: false,
-      newComment: '',
-      selectedPlatform: '',
-      comments: []
-    },
-    // Add more blog objects here if needed
+      expanded: false,
+      newCommentText: '',
+      referralSource: '',
+      askReferral: false,
+      comments: [],
+      showPopup: false
+    }
+    // Add more blogs as needed
   ];
 
-  showPopup = false;
-  showSharePopup = false;
-  shareData = { text: '', platform: '', blog: null as Blog | null, commentIndex: -1 };
-
-  toggleBlog(blog: Blog) {
-    blog.showFull = !blog.showFull;
+  openExpanded(blog: Blog) {
+    blog.expanded = true;
   }
 
-  selectPlatform(blog: Blog, platform: string) {
-    blog.selectedPlatform = platform;
+  closeExpanded(blog: Blog) {
+    blog.expanded = false;
   }
 
-  postComment(blog: Blog) {
-    if (blog.newComment && blog.selectedPlatform) {
-      blog.comments.push({
-        text: blog.newComment,
-        platform: blog.selectedPlatform,
-        showFull: blog.newComment.length <= 80 // show full if short
-      });
-      this.saveComments();
+  openCommentMenu(blog: Blog, comment: BlogComment) {
+    blog.comments.forEach(c => {
+      if (c !== comment) c.showMenu = false;
+    });
+    comment.showMenu = !comment.showMenu;
+  }
 
-      blog.newComment = '';
-      blog.selectedPlatform = '';
-      this.showPopup = true;
-      setTimeout(() => this.showPopup = false, 2000);
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.comment-menu')) {
+      this.blogs.forEach(blog => blog.comments.forEach(c => c.showMenu = false));
     }
   }
 
-  deleteComment(blog: Blog, index: number) {
-    blog.comments.splice(index, 1);
+  promptReferral(blog: Blog) {
+    if (blog.newCommentText.trim().length === 0) return;
+    blog.askReferral = true;
+  }
+
+  sendComment(blog: Blog) {
+    if (!blog.newCommentText.trim() || !blog.referralSource) return;
+    blog.comments.push({
+      text: blog.newCommentText.trim(),
+      platform: '',
+      author: this.currentUser,
+      date: new Date(),
+      showMenu: false
+    });
+    blog.newCommentText = '';
+    blog.referralSource = '';
+    blog.askReferral = false;
     this.saveComments();
+    blog.showPopup = true;
+    setTimeout(() => blog.showPopup = false, 2000);
+  }
+
+  editComment(blog: Blog, index: number) {
+    if (blog.comments[index].author !== this.currentUser) return;
+    const current = blog.comments[index].text;
+    const updated = prompt('Edit your comment:', current);
+    if (updated !== null && updated.trim().length > 0) {
+      blog.comments[index].text = updated.trim();
+      this.saveComments();
+    }
+    blog.comments[index].showMenu = false;
+  }
+
+  deleteComment(blog: Blog, index: number) {
+    if (blog.comments[index].author !== this.currentUser) return;
+    if (confirm('Delete this comment?')) {
+      blog.comments.splice(index, 1);
+      this.saveComments();
+    }
   }
 
   openSharePopup(blog: Blog, comment: BlogComment) {
@@ -112,12 +161,21 @@ export class BlogComponent {
       window.open(url, '_blank');
     }
     this.closeSharePopup();
-    this.showPopup = true;
-    setTimeout(() => this.showPopup = false, 2000);
+    if (this.shareData.blog) {
+      this.shareData.blog.showPopup = true;
+      setTimeout(() => {
+        if (this.shareData.blog) this.shareData.blog.showPopup = false;
+      }, 2000);
+    }
   }
 
   saveComments() {
-    localStorage.setItem('blogs', JSON.stringify(this.blogs));
+    // Only persist comments, not UI state like expanded
+    const blogsToSave = this.blogs.map(blog => ({
+      ...blog,
+      expanded: false
+    }));
+    localStorage.setItem('blogs', JSON.stringify(blogsToSave));
   }
 
   ngOnInit() {
@@ -128,6 +186,7 @@ export class BlogComponent {
         if (loaded[i] && loaded[i].comments) {
           blog.comments = loaded[i].comments;
         }
+        blog.expanded = false;
       });
     }
   }

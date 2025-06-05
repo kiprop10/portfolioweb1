@@ -1,102 +1,138 @@
-<div *ngFor="let blog of blogs" class="blog-card">
-  <img [src]="blog.image" [alt]="blog.title" class="blog-image" />
-  <h3 class="blog-headline">{{ blog.title }}</h3>
-  <p class="blog-snippet" *ngIf="!blog.showFull">{{ blog.snippet }}</p>
-  <p class="blog-full" *ngIf="blog.showFull">{{ blog.content }}</p>
-  <button class="read-more-btn" (click)="toggleBlog(blog)">
-    {{ blog.showFull ? 'Show Less' : 'Read More' }}
-  </button>
-  <div class="comment-section" *ngIf="blog.showFull">
-    <form (ngSubmit)="postComment(blog)" #commentForm="ngForm" class="comment-form-row">
-      <input
-        type="text"
-        name="comment"
-        [(ngModel)]="blog.newComment"
-        placeholder="Write a comment..."
-        required
-      />
-      <!-- Send icon button -->
-      <button
-        type="submit"
-        [disabled]="!blog.selectedPlatform || !blog.newComment"
-        class="send-btn"
-        title="Send"
-      >
-        <i class="fas fa-paper-plane"></i>
-      </button>
-      <div class="platform-select">
-        <span
-          *ngFor="let platform of platforms"
-          class="platform-icon"
-          [ngClass]="{'selected': blog.selectedPlatform === platform.value}"
-          (click)="selectPlatform(blog, platform.value)"
-          [title]="platform.name"
-        >
-          <i [class]="platform.icon"></i>
-        </span>
+<section class="my-12 px-4 sm:px-8 md:px-16 lg:px-32">
+  <div *ngFor="let blog of blogs" class="blog-card mb-12 relative">
+    <img [src]="blog.imageUrl" [alt]="blog.title" class="blog-image" />
+    <h3 class="blog-headline">{{ blog.title }}</h3>
+    <p class="blog-snippet">{{ blog.summary }}</p>
+    <button class="read-more-btn" (click)="openExpanded(blog)">
+      Read More
+    </button>
+
+    <!-- Overlay / Expanded View (separate from card content) -->
+    <div *ngIf="blog.expanded" class="blog-overlay">
+      <div class="blog-expanded-card">
+        <div class="flex justify-end p-4">
+          <button class="blog-close-btn" (click)="closeExpanded(blog)">✕</button>
+        </div>
+        <div class="blog-content">
+          <h3>{{ blog.title }}</h3>
+          <p>{{ blog.content }}</p>
+        </div>
       </div>
-    </form>
-    <ul class="comments-list">
-      <li *ngFor="let comment of blog.comments; let i = index">
-        <span class="platform-icon">
-          <i *ngIf="comment.platform === 'facebook'" class="fab fa-facebook"></i>
-          <i *ngIf="comment.platform === 'instagram'" class="fab fa-instagram"></i>
-          <i *ngIf="comment.platform === 'twitter'" class="fab fa-twitter"></i>
-          <i *ngIf="comment.platform === 'messages'" class="fas fa-comment-dots"></i>
-        </span>
-        <span *ngIf="!comment.showFull && comment.text.length > 80">
-          {{ comment.text | slice:0:80 }}...
-          <a class="show-more" (click)="comment.showFull = true">Show More</a>
-        </span>
-        <span *ngIf="comment.showFull || comment.text.length <= 80">
-          {{ comment.text }}
-          <a *ngIf="comment.text.length > 80" class="show-more" (click)="comment.showFull = false">Show Less</a>
-        </span>
-        <button class="delete-btn" (click)="deleteComment(blog, i)" title="Delete comment">
-          <i class="fas fa-trash"></i>
-        </button>
-        <!-- Share icon button -->
-        <button
-          class="share-btn"
-          title="Share comment"
-          (click)="openSharePopup(blog, comment)"
-        >
-          <i class="fas fa-share"></i>
-        </button>
-      </li>
-    </ul>
+    </div>
+
+    <!-- Comments Section (always below the card, not in overlay) -->
+    <div class="comment-section">
+      <h4>Comments</h4>
+      <div class="comment-list">
+        <div *ngFor="let comment of blog.comments; let i = index" class="comment-item">
+          <div class="comment-bubble">
+            <p>{{ comment.text }}</p>
+            <div class="comment-meta">
+              {{ comment.author }} • {{ comment.date | date:'medium' }}
+            </div>
+          </div>
+          <div class="comment-menu">
+            <button
+              class="comment-menu-btn"
+              (click)="openCommentMenu(blog, comment)"
+            >⋮</button>
+            <div *ngIf="comment.showMenu" class="comment-menu-dropdown">
+              <button (click)="openSharePopup(blog, comment)">
+                Share Comment
+              </button>
+              <button *ngIf="comment.author === currentUser" (click)="editComment(blog, i)">
+                Edit Comment
+              </button>
+              <button *ngIf="comment.author === currentUser" class="text-red-600" (click)="deleteComment(blog, i)">
+                Delete Comment
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Comment Input -->
+      <div class="new-comment-area">
+        <textarea
+          [(ngModel)]="blog.newCommentText"
+          placeholder="Add a comment..."
+          class="new-comment-textarea"
+          rows="3"
+        ></textarea>
+        <div class="new-comment-actions">
+          <button
+            class="send-btn"
+            (click)="promptReferral(blog)"
+            [disabled]="!blog.newCommentText.trim()"
+            type="button"
+          >
+            <i class="fas fa-paper-plane"></i> Send
+          </button>
+        </div>
+      </div>
+
+      <!-- Referral Prompt Popup -->
+      <div class="popup referral-popup" *ngIf="blog.askReferral" style="z-index:4001">
+        <h4>Where did you hear about us?</h4>
+        <form (ngSubmit)="sendComment(blog)">
+          <div class="flex flex-col gap-2 mb-4">
+            <label>
+              <input type="radio" [(ngModel)]="blog.referralSource" name="referral-{{blog.id}}" value="Facebook" required />
+              Facebook
+            </label>
+            <label>
+              <input type="radio" [(ngModel)]="blog.referralSource" name="referral-{{blog.id}}" value="Instagram" />
+              Instagram
+            </label>
+            <label>
+              <input type="radio" [(ngModel)]="blog.referralSource" name="referral-{{blog.id}}" value="Twitter" />
+              Twitter
+            </label>
+            <label>
+              <input type="radio" [(ngModel)]="blog.referralSource" name="referral-{{blog.id}}" value="Other" />
+              Other
+            </label>
+          </div>
+          <div class="popup-actions">
+            <button type="submit" [disabled]="!blog.referralSource">Send</button>
+            <button type="button" (click)="blog.askReferral = false">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Success Toast (below the blog card) -->
+      <div class="toast-popup" *ngIf="blog.showPopup">
+        Comment posted successfully!
+      </div>
+    </div>
+    <!-- End Comments Section -->
+
+    <!-- Share Popup (global, only one at a time) -->
+    <div class="popup" *ngIf="showSharePopup" style="z-index:4002">
+      <h4>Share Comment</h4>
+      <form (ngSubmit)="confirmShare()">
+        <input
+          type="text"
+          [(ngModel)]="shareData.text"
+          name="shareText"
+          required
+        />
+        <div class="platform-select">
+          <span
+            *ngFor="let platform of platforms"
+            class="platform-icon"
+            [ngClass]="{'selected': shareData.platform === platform.value}"
+            (click)="shareData.platform = platform.value"
+            [title]="platform.name"
+          >
+            <i [class]="platform.icon"></i>
+          </span>
+        </div>
+        <div class="popup-actions">
+          <button type="submit" [disabled]="!shareData.platform">Share</button>
+          <button type="button" (click)="closeSharePopup()">Cancel</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-
-<!-- Share popup -->
-<div class="popup" *ngIf="showSharePopup">
-  <h4>Share Comment</h4>
-  <form (ngSubmit)="confirmShare()">
-    <input
-      type="text"
-      [(ngModel)]="shareData.text"
-      name="shareText"
-      required
-    />
-    <div class="platform-select">
-      <span
-        *ngFor="let platform of platforms"
-        class="platform-icon"
-        [ngClass]="{'selected': shareData.platform === platform.value}"
-        (click)="shareData.platform = platform.value"
-        [title]="platform.name"
-      >
-        <i [class]="platform.icon"></i>
-      </span>
-    </div>
-    <div class="popup-actions">
-      <button type="submit" [disabled]="!shareData.platform">Share</button>
-      <button type="button" (click)="closeSharePopup()">Cancel</button>
-    </div>
-  </form>
-</div>
-
-<!-- Success toast -->
-<div class="toast-popup" *ngIf="showPopup">
-  Comment posted successfully!
-</div>
+</section>
