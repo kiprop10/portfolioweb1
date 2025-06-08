@@ -8,16 +8,4 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent {
-  menuOpen = false;
-
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen;
-  }
-
-  closeMenuWithDelay() {
-    setTimeout(() => {
-      this.menuOpen = false;
-    }, 3000);
-  }
-}
+export class NavComponent {}

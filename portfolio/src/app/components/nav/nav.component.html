@@ -1,72 +1,39 @@
 <nav>
-  <button class="nav-menu-btn" (click)="toggleMenu()" aria-label="Open navigation">
-    <i class="fas fa-bars"></i>
-  </button>
-  <!-- Icon bar: visible on mobile, hidden when menu is open -->
-  <div class="icon-bar" [class.hide]="menuOpen">
-    <ul class="icon-bar-list">
-      <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-home"></i>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-user"></i>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/services" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-cogs"></i>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/portfolio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-briefcase"></i>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/contact" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-envelope"></i>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/blog" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-blog"></i>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <!-- Main nav: always visible on desktop, slides down on mobile when menu is open -->
-  <ul class="nav-list" [class.open]="menuOpen">
+  <ul class="nav-list">
     <li>
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenuWithDelay()">
-        <i class="fas fa-home"></i> Home
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-home"></i>
+        <span class="nav-label">Home</span>
       </a>
     </li>
     <li>
-      <a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenuWithDelay()">
-        <i class="fas fa-user"></i> About
+      <a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-user"></i>
+        <span class="nav-label">About</span>
       </a>
     </li>
     <li>
-      <a routerLink="/services" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenuWithDelay()">
-        <i class="fas fa-cogs"></i> Services
+      <a routerLink="/services" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-cogs"></i>
+        <span class="nav-label">Services</span>
       </a>
     </li>
     <li>
-      <a routerLink="/portfolio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenuWithDelay()">
-        <i class="fas fa-briefcase"></i> Portfolio
+      <a routerLink="/portfolio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-briefcase"></i>
+        <span class="nav-label">Portfolio</span>
       </a>
     </li>
     <li>
-      <a routerLink="/contact" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenuWithDelay()">
-        <i class="fas fa-envelope"></i> Contact
+      <a routerLink="/contact" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-envelope"></i>
+        <span class="nav-label">Contact</span>
       </a>
     </li>
     <li>
-      <a routerLink="/blog" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenuWithDelay()">
-        <i class="fas fa-blog"></i> Blog
+      <a routerLink="/blog" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-blog"></i>
+        <span class="nav-label">Blog</span>
       </a>
     </li>
   </ul>
