@@ -36,10 +36,17 @@ export class BlogComponent implements OnInit {
   blogs: Blog[] = [
     {
       id: '1',
-      title: 'First Blog Post',
-      imageUrl: 'https://via.placeholder.com/900x400',
-      summary: 'This is a short summary of the first blog post...',
-      content: 'This is the full content of the first blog post. It can be as long as I want. You can add images and more here.',
+      title: 'Woohoo, My Portfolio Website is Complete!',
+      imageUrl: 'project1.jpg',
+      summary: 'I just finished building my personal portfolio website! Check it out and let me know your thoughts.',
+      content: `
+        <p>I am thrilled to announce the completion of my personal portfolio website! It showcases my projects, skills, and experience in a clean, modern design.</p>
+        <figure class="blog-content-img">
+          <img src="images/project1.jpg" alt="Portfolio website screenshot">
+          <figcaption>Screenshot of my finished portfolio website</figcaption>
+        </figure>
+        <p>The site features a responsive layout, dynamic components, and a smooth user experience built with Angular.</p>
+      `,
       expanded: false,
       newCommentText: '',
       comments: [
@@ -72,8 +79,8 @@ export class BlogComponent implements OnInit {
           avatarUrl: 'https://randomuser.me/api/portraits/men/5.jpg'
         }
       ],
-      showPopup: false,
-    },
+      showPopup: false
+    }
     // Add more blogs as needed
   ];
 

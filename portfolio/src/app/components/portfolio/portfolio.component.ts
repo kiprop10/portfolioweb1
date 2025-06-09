@@ -13,7 +13,7 @@ export class PortfolioComponent {
   projects = [
     {
       title: 'Personal Portfolio',
-      image: 'images/portfolioweb.jpg',
+      image: 'images/project1.jpg',
       url: 'https://ezramutai.github.io/portfolioweb/',
       description: 'A responsive personal portfolio web built with Angular. Showcases projects with screenshots, descriptions and direct links and includes interactive features like a comment section for each project. Mobile user friendly with clean layout, professional styling to highlight your work.',
       updated: new Date('2024-12-15'),

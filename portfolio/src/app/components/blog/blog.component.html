@@ -12,7 +12,7 @@
         <div class="blog-content">
           <h3>{{ blog.title }}</h3>
           <img [src]="blog.imageUrl" [alt]="blog.title" class="blog-image" />
-          <p>{{ blog.content }}</p>
+          <div [innerHTML]="blog.content"></div>
         </div>
       </div>
     </div>
