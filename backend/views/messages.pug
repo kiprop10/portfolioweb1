@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title Messages
+    style.
+      body { font-family: Arial, sans-serif; }
+      .message { margin-bottom: 1em; border-bottom: 1px solid #ccc; padding: 0.5em; }
+      .delete-btn { color: red; border: none; background: none; cursor: pointer; }
+  body
+    h1 Messages
+    if messages.length === 0
+      p No messages yet.
+    each msg in messages
+      .message
+        p= msg.content
+        form(method="POST", action=`/messages/delete/${msg._id}`, style="display:inline;")
+          button.delete-btn(type="submit") Delete
+        small= msg.createdAt.toLocaleString()
