@@ -22,22 +22,43 @@ mongoose.connect(process.env.MONGO_URI, {
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 // API endpoint for frontend to send messages
+// ...existing code...
 app.post('/api/messages/send', async (req, res) => {
   try {
-    const { content } = req.body;
-    const message = new Message({ content });
+    const { contact, content } = req.body;
+
+    // Basic validation
+    if (!contact || !content) {
+      return res.status(400).json({ success: false, error: 'Contact and message are required.' });
+    }
+
+    // Optional: Validate contact as email or phone (simple regex)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?\d{7,15}$/;
+    if (!emailRegex.test(contact) && !phoneRegex.test(contact)) {
+      return res.status(400).json({ success: false, error: 'Contact must be a valid email or phone number.' });
+    }
+
+    const message = new Message({ contact, content });
     await message.save();
     res.status(201).json({ success: true, message: 'Message sent!' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+// ...existing code...
 
 // Server-side rendered messages page
-app.get('/messages', async (req, res) => {
-  const messages = await Message.find().sort({ createdAt: -1 });
-  res.render('messages', { messages });
+// ...existing code...
+app.get('/api/messages', async (req, res) => {
+  try {
+    const messages = await Message.find().sort({ createdAt: -1 });
+    res.json(messages); // Now includes contact field
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
+// ...existing code...
 
 // Delete message
 app.post('/messages/delete/:id', async (req, res) => {

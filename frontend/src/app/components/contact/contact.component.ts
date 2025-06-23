@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./contact.component.css'],
 })
 export class ContactComponent {
+  contact: string = '';
   message: string = '';
   messageSent: boolean = false;
   error: string = '';
@@ -19,12 +20,14 @@ export class ContactComponent {
   constructor(private http: HttpClient) {}
 
   sendMessage() {
+    const trimmedContact = this.contact.trim();
     const trimmedMessage = this.message.trim();
-    if (!trimmedMessage) return;
+    if (!trimmedContact || !trimmedMessage) return;
 
-    this.http.post(`${environment.apiUrl}/api/messages/send`, { content: trimmedMessage }).subscribe({
+    this.http.post(`${environment.apiUrl}/api/messages/send`, { contact: trimmedContact, content: trimmedMessage }).subscribe({
       next: () => {
         this.messageSent = true;
+        this.contact = '';
         this.message = '';
         setTimeout(() => (this.messageSent = false), 3000);
       },
