@@ -1,10 +1,10 @@
 {
   "routes": {
-    "/frontend": {},
-    "/frontend/about": {},
-    "/frontend/blog": {},
-    "/frontend/contact": {},
-    "/frontend/portfolio": {},
-    "/frontend/services": {}
+    "/portfolioweb": {},
+    "/portfolioweb/about": {},
+    "/portfolioweb/blog": {},
+    "/portfolioweb/contact": {},
+    "/portfolioweb/portfolio": {},
+    "/portfolioweb/services": {}
   }
 }
