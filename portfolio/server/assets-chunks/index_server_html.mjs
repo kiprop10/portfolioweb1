@@ -3,7 +3,7 @@ export default `<!doctype html>
 <head><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <meta charset="utf-8">
   <title>Portfolio</title>
-  <base href="/portfolioweb/">
+  <base href="/frontend/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Montserrat -->

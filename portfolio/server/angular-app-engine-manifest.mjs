@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/portfolioweb',
+  basePath: '/frontend',
   supportedLocales: {
   "en-US": ""
 },
