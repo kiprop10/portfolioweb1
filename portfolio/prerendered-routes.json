@@ -1,0 +1,10 @@
+{
+  "routes": {
+    "/portfolioweb": {},
+    "/portfolioweb/about": {},
+    "/portfolioweb/blog": {},
+    "/portfolioweb/contact": {},
+    "/portfolioweb/portfolio": {},
+    "/portfolioweb/services": {}
+  }
+}
