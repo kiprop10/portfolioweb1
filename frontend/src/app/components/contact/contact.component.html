@@ -17,6 +17,14 @@
   <form class="contact-form" (ngSubmit)="sendMessage()" #contactForm="ngForm">
     <input
       type="text"
+      name="name"
+      [(ngModel)]="name"
+      placeholder="Your Name"
+      required
+      class="contact-input"
+    />
+    <input
+      type="text"
       name="contact"
       [(ngModel)]="contact"
       placeholder="Your phone or email"

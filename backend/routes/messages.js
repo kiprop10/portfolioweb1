@@ -5,8 +5,9 @@ const Message = require('../models/message');
 // API endpoint for frontend to send messages
 router.post('/api/messages/send', async (req, res) => {
   try {
-    const { contact, content } = req.body;
-    if (!contact || !content) {
+
+    const { name, contact, content } = req.body;
+    if (!name|| !contact || !content) {
       return res.status(400).json({ success: false, error: 'Contact and message are required.' });
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

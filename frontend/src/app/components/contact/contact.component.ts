@@ -4,6 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
+export interface Message {
+  _id?: string;
+  name: string;
+  contact: string;
+  content: string;
+  createdAt?: string;
+}
+
 @Component({
   selector: 'app-contact',
   standalone: true,
