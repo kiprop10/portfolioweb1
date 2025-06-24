@@ -22,6 +22,9 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error('MongoDB connection error:', err));
 
 // --- ROUTES ---
+app.get('/', (req, res) => {
+  res.render('index');
+});
 
 // API endpoint for frontend to send messages
 app.post('/api/messages/send', async (req, res) => {
