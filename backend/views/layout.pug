@@ -1,0 +1,58 @@
+doctype html
+html
+  head
+    title #{title || 'Admin'}
+    style.
+      body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(120deg, #e0e7ff 0%, #f0fff4 100%);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      nav {
+        background: #3b82f6;
+        padding: 1rem 0;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        transition: color 0.2s;
+      }
+      nav a:hover {
+        color: #fbbf24;
+      }
+      .container {
+        max-width: 700px;
+        margin: 2.5rem auto;
+        background: #fff;
+        border-radius: 1.5rem;
+        box-shadow: 0 6px 32px #0002;
+        padding: 2.5rem 2rem 2rem 2rem;
+        flex: 1;
+      }
+      footer {
+        background: #3b82f6;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: auto;
+        letter-spacing: 0.04em;
+      }
+  body
+    nav
+      a(href="/") Home
+      a(href="/messages") Messages
+      a(href="/blog") Blog
+      a(href="/login") Login
+    block content
+    footer
+      | &copy; #{new Date().getFullYear()} Admin Dashboard
