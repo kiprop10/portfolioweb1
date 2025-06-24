@@ -2,7 +2,7 @@ doctype html
 html
   head
     title #{title || 'Admin'}
-    style.
+        style.
       body {
         font-family: 'Segoe UI', Arial, sans-serif;
         background: linear-gradient(120deg, #e0e7ff 0%, #f0fff4 100%);
@@ -38,6 +38,138 @@ html
         box-shadow: 0 6px 32px #0002;
         padding: 2.5rem 2rem 2rem 2rem;
         flex: 1;
+      }
+      .message {
+        margin-bottom: 1.5em;
+        border-bottom: 1px solid #e0e7ff;
+        padding: 1em 0 0.5em 0;
+        background: linear-gradient(90deg, #f0f9ff 60%, #f0fff4 100%);
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px #3b82f611;
+        position: relative;
+      }
+      .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+        margin-bottom: 0.3em;
+      }
+      .name {
+        color: #06b6d4;
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-right: 0.5em;
+      }
+      .contact {
+        color: #3b82f6;
+        font-weight: 500;
+        font-size: 1em;
+        margin-right: 0.5em;
+      }
+      .content {
+        color: #222;
+        font-size: 1.08em;
+        margin-top: 0.3em;
+        display: block;
+      }
+      .meta {
+        color: #888;
+        font-size: 0.95em;
+        margin-top: 0.5em;
+        display: block;
+      }
+      .delete-btn {
+        color: #fff;
+        background: #ef4444;
+        border: none;
+        border-radius: 0.5em;
+        padding: 0.3em 1em;
+        font-size: 0.95em;
+        cursor: pointer;
+        margin-left: 1em;
+        transition: background 0.2s;
+      }
+      .delete-btn:hover {
+        background: #b91c1c;
+      }
+      footer {
+        background: #3b82f6;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: auto;
+        letter-spacing: 0.04em;
+      }
+      nav {
+        background: #3b82f6;
+        padding: 1rem 0;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        transition: color 0.2s;
+      }
+      nav a:hover {
+        color: #fbbf24;
+      }
+      .container {
+        max-width: 700px;
+        margin: 2.5rem auto;
+        background: #fff;
+        border-radius: 1.5rem;
+        box-shadow: 0 6px 32px #0002;
+        padding: 2.5rem 2rem 2rem 2rem;
+        flex: 1;
+      }
+      .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+        margin-bottom: 0.3em;
+      }
+      .name {
+        color: #06b6d4;
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-right: 0.5em;
+      }
+      .contact {
+        color: #3b82f6;
+        font-weight: 500;
+        font-size: 1em;
+        margin-right: 0.5em;
+      }
+      .content {
+        color: #222;
+        font-size: 1.08em;
+        margin-top: 0.3em;
+        display: block;
+      }
+      .meta {
+        color: #888;
+        font-size: 0.95em;
+        margin-top: 0.5em;
+        display: block;
+      }
+      .delete-btn {
+        color: #fff;
+        background: #ef4444;
+        border: none;
+        border-radius: 0.5em;
+        padding: 0.3em 1em;
+        font-size: 0.95em;
+        cursor: pointer;
+        margin-left: 1em;
+        transition: background 0.2s;
+      }
+      .delete-btn:hover {
+        background: #b91c1c;
       }
       footer {
         background: #3b82f6;
