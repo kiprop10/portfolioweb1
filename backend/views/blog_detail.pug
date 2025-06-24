@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  .container
+    a(href="/blog") &larr; Back to Blog List
+    if blog.imageUrl
+      img(src=blog.imageUrl, alt="Blog Image", style="max-width:300px;max-height:180px;margin-bottom:1em;display:block;")
+    h1= blog.title
+    span.meta Posted: #{blog.createdAt.toLocaleString()}
+    p= blog.content
+
+    h3(style="margin-top:2em;") Comments (#{blog.comments.length})
+    if blog.comments.length === 0
+      p No comments yet.
+    else
+      ul
+        each comment in blog.comments
+          li
+            strong= comment.author
+            |  (#{comment.createdAt ? new Date(comment.createdAt).toLocaleString() : ''}):
+            |  #{comment.text}
+
+    h4(style="margin-top:1.5em;") Add a Comment
+    form(method="POST", action=`/blog/${blog._id}/comment`)
+      .form-group
+        label(for="author") Name:
+        input#author(type="text", name="author", required)
+      .form-group
+        label(for="text") Comment:
+        textarea#text(name="text", required)
+      button(type="submit") Submit

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .container
+    h1= button === 'Add Blog' ? 'Add New Blog' : 'Edit Blog'
+    form(method="POST", action=action, enctype="multipart/form-data")
+      .form-group
+        label(for="title") Title:
+        input#title(type="text", name="title", required, value=blog.title || '')
+      .form-group
+        label(for="content") Content:
+        textarea#content(name="content", required)= blog.content || ''
+      .form-group
+        label(for="image") Image:
+        input#image(type="file", name="image")
+        if blog.imageUrl
+          img(src=blog.imageUrl, alt="Blog Image", style="max-width:200px;max-height:120px;display:block;margin-top:0.5em;")
+      button(type="submit")= button

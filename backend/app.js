@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
@@ -22,7 +23,9 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Use routes
 const messageRoutes = require('./routes/messages');
+const blogRoutes = require('./routes/blog'); // Add blog routes
 app.use(messageRoutes);
+app.use(blogRoutes); // Register blog routes
 
 // Default route (homepage)
 app.get('/', (req, res) => {
