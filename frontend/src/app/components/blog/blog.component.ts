@@ -1,165 +1,160 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface BlogComment {
-  text: string;
+  _id?: string;
   author: string;
-  date: Date;
-  showMenu: boolean;
-  avatarUrl?: string;
+  text: string;
+  createdAt?: string;
+  editing?: boolean;
+  editText?: string;
+  showMenu?: boolean;
 }
 
 interface Blog {
-  id: string;
+  _id: string;
   title: string;
   imageUrl: string;
-  summary: string;
   content: string;
-  expanded: boolean;
-  newCommentText: string;
   comments: BlogComment[];
-  showPopup: boolean;
+  createdAt?: string;
+  expanded?: boolean;
+  newCommentText?: string;
+  showPopup?: boolean;
 }
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css']
 })
 export class BlogComponent implements OnInit {
+  blogs: Blog[] = [];
   currentUser = 'alice@example.com';
   defaultAvatar = 'https://randomuser.me/api/portraits/men/1.jpg';
+  loading = false;
+  error = '';
 
-  blogs: Blog[] = [
-    {
-      id: '1',
-      title: 'Woohoo, My Portfolio Website is Complete!',
-      imageUrl: 'project1.jpg',
-      summary: 'I just finished building my personal portfolio website! Check it out and let me know your thoughts.',
-      content: `
-        <p>I am thrilled to announce the completion of my personal portfolio website! It showcases my projects, skills, and experience in a clean, modern design.</p>
-        <figure class="blog-content-img">
-          <img src="images/project1.jpg" alt="Portfolio website screenshot">
-          <figcaption>Screenshot of my finished portfolio website</figcaption>
-        </figure>
-        <p>The site features a responsive layout, dynamic components, and a smooth user experience built with Angular.</p>
-      `,
-      expanded: false,
-      newCommentText: '',
-      comments: [
-        {
-          text: 'Great post!',
-          author: 'Jane Doe',
-          date: new Date(),
-          showMenu: false,
-          avatarUrl: 'https://randomuser.me/api/portraits/women/2.jpg'
-        },
-        {
-          text: 'Thanks for sharing.',
-          author: 'John Smith',
-          date: new Date(),
-          showMenu: false,
-          avatarUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
-        },
-        {
-          text: 'Very insightful.',
-          author: 'Alice Example',
-          date: new Date(),
-          showMenu: false,
-          avatarUrl: 'https://randomuser.me/api/portraits/women/4.jpg'
-        },
-        {
-          text: 'I learned a lot!',
-          author: 'Bob Example',
-          date: new Date(),
-          showMenu: false,
-          avatarUrl: 'https://randomuser.me/api/portraits/men/5.jpg'
-        }
-      ],
-      showPopup: false
-    }
-    // Add more blogs as needed
-  ];
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // Optionally load comments from localStorage
-    const saved = localStorage.getItem('blogs');
-    if (saved) {
-      const parsed: Blog[] = JSON.parse(saved);
-      this.blogs.forEach((b, i) => {
-        if (parsed[i]?.comments) b.comments = parsed[i].comments;
-        b.showPopup = false;
-        b.expanded = false;
-      });
-    }
+    this.fetchBlogs();
   }
 
-  openExpanded(blog: Blog) {
-    blog.expanded = true;
+  fetchBlogs() {
+    this.loading = true;
+    this.http.get<Blog[]>(`${environment.apiUrl}/api/blogs`).subscribe({
+      next: blogs => {
+        this.blogs = blogs.map(b => ({
+          ...b,
+          expanded: false,
+          newCommentText: '',
+          showPopup: false,
+          comments: b.comments.map(c => ({
+            ...c,
+            editing: false,
+            editText: '',
+            showMenu: false
+          }))
+        }));
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load blogs';
+        this.loading = false;
+      }
+    });
   }
 
-  closeExpanded(blog: Blog) {
-    blog.expanded = false;
+  sendComment(blog: Blog) {
+    const text = blog.newCommentText?.trim();
+    if (!text) return;
+    this.http.post<Blog>(`${environment.apiUrl}/api/blogs/${blog._id}/comments`, {
+      author: this.currentUser,
+      text
+    }).subscribe({
+      next: updatedBlog => {
+        blog.comments = updatedBlog.comments.map(c => ({
+          ...c,
+          editing: false,
+          editText: '',
+          showMenu: false
+        }));
+        blog.newCommentText = '';
+        blog.showPopup = true;
+        setTimeout(() => blog.showPopup = false, 3000);
+      },
+      error: () => {
+        this.error = 'Failed to add comment';
+        setTimeout(() => this.error = '', 3000);
+      }
+    });
+  }
+
+  deleteComment(blog: Blog, comment: BlogComment) {
+    if (!blog || !comment || !comment._id) return;
+    if (!confirm('Delete this comment?')) return;
+    this.http.delete<Blog>(`${environment.apiUrl}/api/blogs/${blog._id}/comments/${comment._id}`).subscribe({
+      next: updatedBlog => {
+        blog.comments = updatedBlog.comments.map(c => ({
+          ...c,
+          editing: false,
+          editText: '',
+          showMenu: false
+        }));
+      },
+      error: () => {
+        this.error = 'Failed to delete comment';
+        setTimeout(() => this.error = '', 3000);
+      }
+    });
+  }
+
+  editComment(comment: BlogComment) {
+    comment.editing = true;
+    comment.editText = comment.text;
+    comment.showMenu = false;
+  }
+
+  cancelEdit(comment: BlogComment) {
+    comment.editing = false;
+    comment.editText = '';
+  }
+
+  saveEdit(blog: Blog, comment: BlogComment) {
+    const newText = comment.editText?.trim();
+    if (!newText || !comment._id) return;
+    this.http.put<Blog>(
+      `${environment.apiUrl}/api/blogs/${blog._id}/comments/${comment._id}`,
+      { text: newText }
+    ).subscribe({
+      next: updatedBlog => {
+        blog.comments = updatedBlog.comments.map(c => ({
+          ...c,
+          editing: false,
+          editText: '',
+          showMenu: false
+        }));
+      },
+      error: () => {
+        this.error = 'Failed to update comment';
+        setTimeout(() => this.error = '', 3000);
+      }
+    });
   }
 
   openCommentMenu(blog: Blog, comment: BlogComment) {
     blog.comments.forEach(c => c.showMenu = false);
-    comment.showMenu = !comment.showMenu;
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (!target.closest('.comment-menu')) {
-      this.blogs.forEach(b => b.comments.forEach(c => c.showMenu = false));
-    }
-  }
-
-  sendComment(blog: Blog) {
-    const text = blog.newCommentText.trim();
-    if (!text) return;
-    blog.comments.push({
-      text,
-      author: this.currentUser,
-      date: new Date(),
-      showMenu: false,
-      avatarUrl: this.defaultAvatar
-    });
-    blog.newCommentText = '';
-    this.saveComments();
-    blog.showPopup = true;
-    setTimeout(() => blog.showPopup = false, 3000);
-  }
-
-  editComment(blog: Blog, index: number) {
-    const comment = blog.comments[index];
-    if (comment.author !== this.currentUser) return;
-    const updated = prompt('Edit your comment:', comment.text);
-    if (updated !== null && updated.trim().length > 0) {
-      comment.text = updated.trim();
-      this.saveComments();
-    }
-    comment.showMenu = false;
-  }
-
-  deleteComment(blog: Blog, index: number) {
-    const comment = blog.comments[index];
-    if (comment.author !== this.currentUser) return;
-    if (confirm('Delete this comment?')) {
-      blog.comments.splice(index, 1);
-      this.saveComments();
-    }
-  }
-
-  private saveComments() {
-    const toSave = this.blogs.map(b => ({ ...b, expanded: false, showPopup: false }));
-    localStorage.setItem('blogs', JSON.stringify(toSave));
+    comment.showMenu = true;
   }
 
   openSharePopup(blog: Blog, comment: BlogComment) {
-    // Placeholder for share functionality
-    alert('Share feature coming soon!');
+    // Implement your share logic here
+    alert('Share functionality not implemented.');
   }
 }

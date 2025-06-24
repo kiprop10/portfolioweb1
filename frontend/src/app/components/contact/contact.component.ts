@@ -20,6 +20,7 @@ export interface Message {
   styleUrls: ['./contact.component.css'],
 })
 export class ContactComponent {
+  name: string = '';
   contact: string = '';
   message: string = '';
   messageSent: boolean = false;
@@ -28,13 +29,15 @@ export class ContactComponent {
   constructor(private http: HttpClient) {}
 
   sendMessage() {
+    const trimmedName = this.name.trim();
     const trimmedContact = this.contact.trim();
     const trimmedMessage = this.message.trim();
-    if (!trimmedContact || !trimmedMessage) return;
+    if (!trimmedName || !trimmedContact || !trimmedMessage) return;
 
-    this.http.post(`${environment.apiUrl}/api/messages/send`, { contact: trimmedContact, content: trimmedMessage }).subscribe({
+    this.http.post(`${environment.apiUrl}/api/messages/send`, { name: trimmedName, contact: trimmedContact, content: trimmedMessage }).subscribe({
       next: () => {
         this.messageSent = true;
+        this.name = '';
         this.contact = '';
         this.message = '';
         setTimeout(() => (this.messageSent = false), 3000);

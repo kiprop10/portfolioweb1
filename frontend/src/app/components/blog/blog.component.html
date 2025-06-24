@@ -1,65 +1,59 @@
-<div class="blog-list">
-  <div *ngFor="let blog of blogs" class="blog-card">
-    <img [src]="blog.imageUrl" [alt]="blog.title" class="blog-image" />
-    <h3 class="blog-headline">{{ blog.title }}</h3>
-    <p class="blog-snippet">{{ blog.summary }}</p>
-    <button class="read-more-btn" (click)="openExpanded(blog)">Read More</button>
+<div *ngFor="let blog of blogs" class="blog-card">
+  <div class="blog-header">
+    <h2>{{ blog.title }}</h2>
+    <img [src]="blog.imageUrl" [alt]="blog.title" class="blog-image" *ngIf="blog.imageUrl">
+    <div class="blog-date">{{ blog.createdAt | date:'medium' }}</div>
+  </div>
+  <div class="blog-content">
+    <p>{{ blog.content }}</p>
+  </div>
 
-    <!-- Overlay for full blog content -->
-    <div *ngIf="blog.expanded" class="blog-overlay">
-      <div class="blog-expanded-card">
-        <button class="blog-close-btn" (click)="closeExpanded(blog)">✕</button>
-        <div class="blog-content">
-          <h3>{{ blog.title }}</h3>
-          <img [src]="blog.imageUrl" [alt]="blog.title" class="blog-image" />
-          <div [innerHTML]="blog.content"></div>
+  <div class="comment-section">
+    <h4>Comments</h4>
+    <div class="comment-list">
+      <div *ngFor="let comment of blog.comments" class="comment-item">
+        <div class="avatar">
+          <img [src]="defaultAvatar" alt="avatar" />
+        </div>
+        <div class="comment-bubble">
+          <div class="comment-header">
+            <span class="comment-author">{{ comment.author }}</span>
+            <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
+          </div>
+          <ng-container *ngIf="!comment.editing; else editBlock">
+            <p class="comment-text">{{ comment.text }}</p>
+          </ng-container>
+          <ng-template #editBlock>
+            <textarea [(ngModel)]="comment.editText" rows="2"></textarea>
+            <button (click)="saveEdit(blog, comment)">Save</button>
+            <button (click)="cancelEdit(comment)">Cancel</button>
+          </ng-template>
+        </div>
+        <div class="comment-menu">
+          <button class="comment-menu-btn" (click)="openCommentMenu(blog, comment)">⋮</button>
+          <div *ngIf="comment.showMenu" class="comment-menu-dropdown">
+            <button (click)="openSharePopup(blog, comment)">Share</button>
+            <button *ngIf="comment.author === currentUser && !comment.editing" (click)="editComment(comment)">Edit</button>
+            <button *ngIf="comment.author === currentUser" class="delete-btn" (click)="deleteComment(blog, comment)">Delete</button>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Comments Section -->
-    <div class="comment-section">
-      <h4>Comments</h4>
-      <div class="comment-list">
-        <div *ngFor="let comment of blog.comments; let i = index" class="comment-item">
-          <div class="avatar">
-            <img [src]="comment.avatarUrl || defaultAvatar" alt="avatar" />
-          </div>
-          <div class="comment-bubble">
-            <div class="comment-header">
-              <span class="comment-author">{{ comment.author }}</span>
-              <span class="comment-date">{{ comment.date | date:'short' }}</span>
-            </div>
-            <p class="comment-text">{{ comment.text }}</p>
-          </div>
-          <div class="comment-menu">
-            <button class="comment-menu-btn" (click)="openCommentMenu(blog, comment)">⋮</button>
-            <div *ngIf="comment.showMenu" class="comment-menu-dropdown">
-              <button (click)="openSharePopup(blog, comment)">Share</button>
-              <button *ngIf="comment.author === currentUser" (click)="editComment(blog, i)">Edit</button>
-              <button *ngIf="comment.author === currentUser" class="delete-btn" (click)="deleteComment(blog, i)">Delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- New Comment Input -->
-      <div class="new-comment-area">
-        <textarea [(ngModel)]="blog.newCommentText"
-                  placeholder="Add a comment..."
-                  class="new-comment-textarea"
-                  rows="3"></textarea>
-        <button class="send-btn"
-                [disabled]="!blog.newCommentText.trim()"
-                (click)="sendComment(blog)">
-          <i class="fas fa-paper-plane"></i> Send
-        </button>
-      </div>
-
-      <!-- Toast popup -->
-      <div class="toast-popup" *ngIf="blog.showPopup">
-        Comment posted!
-      </div>
+    <!-- New Comment Input -->
+    <div class="new-comment-area">
+      <textarea [(ngModel)]="blog.newCommentText"
+                placeholder="Add a comment..."
+                class="new-comment-textarea"
+                rows="3"></textarea>
+      <button class="send-btn"
+              [disabled]="!blog.newCommentText?.trim()"
+              (click)="sendComment(blog)">
+        <i class="fas fa-paper-plane"></i> Send
+      </button>
+    </div>
+    <!-- Toast popup -->
+    <div class="toast-popup" *ngIf="blog.showPopup">
+      Comment posted!
     </div>
   </div>
 </div>
