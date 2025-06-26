@@ -1,4 +1,3 @@
-// ...existing code...
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
@@ -8,11 +7,11 @@ const commentSchema = new mongoose.Schema({
 });
 
 const blogSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  imageUrl: String,
-  createdAt: { type: Date, default: Date.now },
-  comments: [commentSchema]
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  imageUrl: { type: String },
+  comments: [commentSchema],
+  createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Blog', blogSchema);

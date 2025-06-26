@@ -2,17 +2,14 @@ extends layout
 
 block content
   .container
-    h1= button === 'Add Blog' ? 'Add New Blog' : 'Edit Blog'
-    form(method="POST", action=action, enctype="multipart/form-data")
-      .form-group
-        label(for="title") Title:
-        input#title(type="text", name="title", required, value=blog.title || '')
-      .form-group
-        label(for="content") Content:
-        textarea#content(name="content", required)= blog.content || ''
-      .form-group
-        label(for="image") Image:
-        input#image(type="file", name="image")
-        if blog.imageUrl
-          img(src=blog.imageUrl, alt="Blog Image", style="max-width:200px;max-height:120px;display:block;margin-top:0.5em;")
-      button(type="submit")= button
+    h1= button
+    form(method="POST", action=action, enctype="multipart/form-data", style="display:flex;flex-direction:column;gap:1.2em;max-width:500px;")
+      label(for="title", style="font-weight:500;") Title:
+      input(type="text", name="title", id="title", required, value=blog.title, style="padding:0.7em 1em;border:2px solid #a5b4fc;border-radius:0.7em;font-size:1em;")
+      label(for="content", style="font-weight:500;") Content:
+      textarea(name="content", id="content", required, rows="7", style="padding:0.7em 1em;border:2px solid #a5b4fc;border-radius:0.7em;font-size:1em;")= blog.content
+      label(for="image", style="font-weight:500;") Image:
+      input(type="file", name="image", id="image", style="margin-bottom:0.5em;")
+      if blog.imageUrl
+        img(src=blog.imageUrl, alt="Blog Image", style="max-width:220px;max-height:120px;border-radius:0.5em;margin-bottom:0.5em;")
+      button(type="submit", style="background:linear-gradient(90deg,#3b82f6 60%,#06d6a0 100%);color:#fff;border:none;border-radius:0.7em;padding:0.7em 2em;font-size:1.1em;font-weight:600;cursor:pointer;box-shadow:0 2px 12px #06d6a033;transition:background 0.2s;")= button

@@ -3,17 +3,17 @@ extends layout
 block content
   .container
     h1 Blog Management
-    a(href="/blog/new", style="margin-bottom:1.5em;display:inline-block;") Add New Blog
+    a(href="/blog/new", style="margin-bottom:1.5em;display:inline-block;background:#3b82f6;color:#fff;padding:0.5em 1.2em;border-radius:0.5em;text-decoration:none;font-weight:500;") Add New Blog
     if blogs.length === 0
       p No blogs yet.
     each blog in blogs
-      .message
+      .blog-card(style="margin-bottom:2em;padding:1.5em 1em;background:linear-gradient(90deg,#f0f9ff 60%,#f0fff4 100%);border-radius:1em;box-shadow:0 2px 8px #3b82f611;position:relative;")
         if blog.imageUrl
-          img(src=blog.imageUrl, alt="Blog Image", style="max-width:200px;max-height:120px;margin-bottom:0.5em;display:block;")
-        h2 
-          a(href=`/blog/${blog._id}`)= blog.title
-        span.meta Posted: #{blog.createdAt.toLocaleString()}
-        p= blog.content
-        a(href=`/blog/edit/${blog._id}`) Edit
+          img(src=blog.imageUrl, alt="Blog Image", style="max-width:220px;max-height:120px;margin-bottom:0.5em;display:block;border-radius:0.5em;")
+        h2(style="margin:0 0 0.3em 0;color:#3b82f6;")= blog.title
+        span.meta(style="color:#888;font-size:0.95em;") Posted: #{blog.createdAt.toLocaleString()}
+        p(style="margin:0.7em 0 1em 0;")= blog.content.length > 200 ? blog.content.substring(0, 200) + '...' : blog.content
+        a(href=`/blog/edit/${blog._id}`, style="margin-right:1em;color:#06b6d4;font-weight:500;") Edit
+        a(href=`/blog/${blog._id}`, style="margin-right:1em;color:#3b82f6;font-weight:500;") See More
         form(method="POST", action=`/blog/delete/${blog._id}`, style="display:inline;")
-          button.delete-btn(type="submit") Delete
+          button.delete-btn(type="submit", style="background:#ef4444;color:#fff;border:none;border-radius:0.5em;padding:0.3em 1em;font-size:0.95em;cursor:pointer;transition:background 0.2s;") Delete

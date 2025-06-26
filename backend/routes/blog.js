@@ -11,165 +11,113 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Show all blogs (admin)
-router.get('/blog', async (req, res) => {
-  try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.render('blog', { blogs });
-  } catch (err) {
-    res.status(500).send('Error loading blogs');
-  }
+// Get all blogs (for frontend)
+router.get('/api/blogs', async (req, res) => {
+  const blogs = await Blog.find().sort({ createdAt: -1 });
+  res.json(blogs);
 });
 
-// Add new blog (form)
+// Blog form for creating a new blog (admin)
 router.get('/blog/new', (req, res) => {
   res.render('blog_form', { blog: {}, action: '/blog/new', button: 'Add Blog' });
 });
 
-// Handle new blog POST
+// Handle new blog POST (admin)
 router.post('/blog/new', upload.single('image'), async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
-    await Blog.create({ title, content, imageUrl, comments: [] });
-    res.redirect('/blog');
-  } catch (err) {
-    res.status(500).send('Error creating blog');
-  }
+  const { title, content } = req.body;
+  const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
+  await Blog.create({ title, content, imageUrl, comments: [] });
+  res.redirect('/blog');
 });
 
-// Edit blog (form)
+// Blog form for editing a blog (admin)
 router.get('/blog/edit/:id', async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).send('Blog not found');
-    res.render('blog_form', { blog, action: `/blog/edit/${blog._id}`, button: 'Update Blog' });
-  } catch (err) {
-    res.status(500).send('Error loading blog');
-  }
+  const blog = await Blog.findById(req.params.id);
+  res.render('blog_form', { blog, action: `/blog/edit/${blog._id}`, button: 'Update Blog' });
 });
 
-// Handle blog update
+// Handle blog update POST (admin)
 router.post('/blog/edit/:id', upload.single('image'), async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    let update = { title, content };
-    if (req.file) update.imageUrl = '/uploads/' + req.file.filename;
-    await Blog.findByIdAndUpdate(req.params.id, update);
-    res.redirect('/blog');
-  } catch (err) {
-    res.status(500).send('Error updating blog');
-  }
+  const { title, content } = req.body;
+  let update = { title, content };
+  if (req.file) update.imageUrl = '/uploads/' + req.file.filename;
+  await Blog.findByIdAndUpdate(req.params.id, update);
+  res.redirect('/blog');
 });
 
-// Delete blog
-router.post('/blog/delete/:id', async (req, res) => {
-  try {
-    await Blog.findByIdAndDelete(req.params.id);
-    res.redirect('/blog');
-  } catch (err) {
-    res.status(500).send('Error deleting blog');
-  }
-});
-
-// Show single blog with comments (admin)
+// Blog detail page (server-rendered)
 router.get('/blog/:id', async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).send('Blog not found');
-    res.render('blog_detail', { blog });
-  } catch (err) {
-    res.status(500).send('Error loading blog');
-  }
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) return res.status(404).send('Blog not found');
+  res.render('blog_detail', { blog });
 });
 
-// Add comment (admin)
-router.post('/blog/:id/comment', async (req, res) => {
-  try {
-    const { author, text } = req.body;
-    await Blog.findByIdAndUpdate(req.params.id, {
-      $push: { comments: { author, text } }
-    });
-    res.redirect(`/blog/${req.params.id}`);
-  } catch (err) {
-    res.status(500).send('Error adding comment');
-  }
+// Admin blog management page (server-rendered)
+router.get('/blog', async (req, res) => {
+  const blogs = await Blog.find().sort({ createdAt: -1 });
+  res.render('blog', { blogs });
 });
 
-// --- REST API ENDPOINTS (FRONTEND) ---
-
-// Get all blogs (JSON)
-router.get('/api/blogs', async (req, res) => {
-  try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.json(blogs);
-  } catch (err) {
-    res.status(500).json({ error: 'Error loading blogs' });
-  }
-});
-
-// Get single blog by ID (JSON)
+// Get single blog by ID (for "see more" detail)
 router.get('/api/blogs/:id', async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).json({ error: 'Blog not found' });
-    res.json(blog);
-  } catch (err) {
-    res.status(500).json({ error: 'Error loading blog' });
-  }
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) return res.status(404).json({ error: 'Blog not found' });
+  res.json(blog);
 });
 
-// Create new blog (API)
+// Add new blog (admin, with image)
 router.post('/api/blogs', upload.single('image'), async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
-    const blog = await Blog.create({ title, content, imageUrl, comments: [] });
-    res.status(201).json(blog);
-  } catch (err) {
-    res.status(500).json({ error: 'Error creating blog' });
-  }
+  const { title, content } = req.body;
+  const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
+  const blog = await Blog.create({ title, content, imageUrl, comments: [] });
+  res.status(201).json(blog);
 });
 
-// Update blog (API)
+// Edit blog (admin, with image)
 router.put('/api/blogs/:id', upload.single('image'), async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    let update = { title, content };
-    if (req.file) update.imageUrl = '/uploads/' + req.file.filename;
-    const blog = await Blog.findByIdAndUpdate(req.params.id, update, { new: true });
-    if (!blog) return res.status(404).json({ error: 'Blog not found' });
-    res.json(blog);
-  } catch (err) {
-    res.status(500).json({ error: 'Error updating blog' });
-  }
+  const { title, content } = req.body;
+  let update = { title, content };
+  if (req.file) update.imageUrl = '/uploads/' + req.file.filename;
+  const blog = await Blog.findByIdAndUpdate(req.params.id, update, { new: true });
+  res.json(blog);
 });
 
-// Delete blog (API)
+// Delete blog (admin)
 router.delete('/api/blogs/:id', async (req, res) => {
-  try {
-    const blog = await Blog.findByIdAndDelete(req.params.id);
-    if (!blog) return res.status(404).json({ error: 'Blog not found' });
-    res.json({ message: 'Blog deleted' });
-  } catch (err) {
-    res.status(500).json({ error: 'Error deleting blog' });
-  }
+  await Blog.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
 });
 
-// Add comment to blog (API)
+// Add comment
 router.post('/api/blogs/:id/comments', async (req, res) => {
-  try {
-    const { author, text } = req.body;
-    const blog = await Blog.findByIdAndUpdate(
-      req.params.id,
-      { $push: { comments: { author, text } } },
-      { new: true }
-    );
-    if (!blog) return res.status(404).json({ error: 'Blog not found' });
-    res.json(blog);
-  } catch (err) {
-    res.status(500).json({ error: 'Error adding comment' });
-  }
+  const { author, text } = req.body;
+  if (!author || !text) return res.status(400).json({ error: 'Author and text required' });
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) return res.status(404).json({ error: 'Blog not found' });
+  blog.comments.push({ author, text });
+  await blog.save();
+  res.json(blog);
+});
+
+// Edit comment
+router.put('/api/blogs/:blogId/comments/:commentId', async (req, res) => {
+  const { text } = req.body;
+  const blog = await Blog.findById(req.params.blogId);
+  if (!blog) return res.status(404).json({ error: 'Blog not found' });
+  const comment = blog.comments.id(req.params.commentId);
+  if (!comment) return res.status(404).json({ error: 'Comment not found' });
+  comment.text = text;
+  await blog.save();
+  res.json(blog);
+});
+
+// Delete comment
+router.delete('/api/blogs/:blogId/comments/:commentId', async (req, res) => {
+  const blog = await Blog.findById(req.params.blogId);
+  if (!blog) return res.status(404).json({ error: 'Blog not found' });
+  blog.comments.id(req.params.commentId).remove();
+  await blog.save();
+  res.json(blog);
 });
 
 module.exports = router;
