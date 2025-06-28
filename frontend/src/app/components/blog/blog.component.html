@@ -1,59 +1,32 @@
 <div *ngFor="let blog of blogs" class="blog-card">
-  <div class="blog-header">
-    <h2>{{ blog.title }}</h2>
-    <img [src]="blog.imageUrl" [alt]="blog.title" class="blog-image" *ngIf="blog.imageUrl">
-    <div class="blog-date">{{ blog.createdAt | date:'medium' }}</div>
-  </div>
-  <div class="blog-content">
-    <p>{{ blog.content }}</p>
-  </div>
+  <img *ngIf="blog.imageUrl" [src]="blog.imageUrl" alt="Blog Image" />
+  <h2>{{ blog.title }}</h2>
+  <span class="meta">Posted: {{ blog.createdAt | date:'medium' }}</span>
+  <p>
+    <!-- Show excerpt if not expanded, full content if expanded -->
+    <ng-container *ngIf="!blog.expanded">
+      {{ blog.content.length > 200 ? (blog.content | slice:0:200) + '...' : blog.content }}
+    </ng-container>
+    <ng-container *ngIf="blog.expanded">
+      {{ blog.content }}
+    </ng-container>
+  </p>
+  <button *ngIf="!blog.expanded" (click)="showDetail(blog)" class="read-more-btn">See More</button>
+  <button *ngIf="blog.expanded" (click)="closeDetail(blog)" class="close-btn">Close</button>
 
-  <div class="comment-section">
-    <h4>Comments</h4>
-    <div class="comment-list">
-      <div *ngFor="let comment of blog.comments" class="comment-item">
-        <div class="avatar">
-          <img [src]="defaultAvatar" alt="avatar" />
-        </div>
-        <div class="comment-bubble">
-          <div class="comment-header">
-            <span class="comment-author">{{ comment.author }}</span>
-            <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
-          </div>
-          <ng-container *ngIf="!comment.editing; else editBlock">
-            <p class="comment-text">{{ comment.text }}</p>
-          </ng-container>
-          <ng-template #editBlock>
-            <textarea [(ngModel)]="comment.editText" rows="2"></textarea>
-            <button (click)="saveEdit(blog, comment)">Save</button>
-            <button (click)="cancelEdit(comment)">Cancel</button>
-          </ng-template>
-        </div>
-        <div class="comment-menu">
-          <button class="comment-menu-btn" (click)="openCommentMenu(blog, comment)">⋮</button>
-          <div *ngIf="comment.showMenu" class="comment-menu-dropdown">
-            <button (click)="openSharePopup(blog, comment)">Share</button>
-            <button *ngIf="comment.author === currentUser && !comment.editing" (click)="editComment(comment)">Edit</button>
-            <button *ngIf="comment.author === currentUser" class="delete-btn" (click)="deleteComment(blog, comment)">Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- New Comment Input -->
-    <div class="new-comment-area">
-      <textarea [(ngModel)]="blog.newCommentText"
-                placeholder="Add a comment..."
-                class="new-comment-textarea"
-                rows="3"></textarea>
-      <button class="send-btn"
-              [disabled]="!blog.newCommentText?.trim()"
-              (click)="sendComment(blog)">
-        <i class="fas fa-paper-plane"></i> Send
-      </button>
-    </div>
-    <!-- Toast popup -->
-    <div class="toast-popup" *ngIf="blog.showPopup">
-      Comment posted!
-    </div>
+  <!-- Blog Detail: Comments and Add Comment, only if expanded -->
+  <div *ngIf="blog.expanded" class="blog-detail">
+    <h3>Comments</h3>
+    <ul>
+      <li *ngFor="let comment of blog.comments">
+        <strong>{{ comment.author }}</strong>: {{ comment.text }}
+        <span class="meta">{{ comment.createdAt | date:'short' }}</span>
+      </li>
+    </ul>
+    <form (ngSubmit)="addComment(blog)">
+      <input [(ngModel)]="blog.newCommentAuthor" name="author{{blog._id}}" placeholder="Your name" required />
+      <input [(ngModel)]="blog.newCommentText" name="text{{blog._id}}" placeholder="Add a comment..." required />
+      <button type="submit">Add Comment</button>
+    </form>
   </div>
 </div>
