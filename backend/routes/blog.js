@@ -4,86 +4,114 @@ const Blog = require('../models/blog');
 const multer = require('multer');
 const path = require('path');
 
-// Multer setup for image uploads
+// === Multer Setup for Image Uploads ===
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-    });
-    const upload = multer({ storage });
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+const upload = multer({ storage });
 
-    // --------- API ROUTES (for frontend) ---------
+// ========== API ROUTES (Frontend) ==========
 
-    // Get all blogs (frontend)
-    router.get('/api/blogs', async (req, res) => {
-      const blogs = await Blog.find().sort({ createdAt: -1 });
-        res.json(blogs);
-        });
+// Get all blogs (used by Angular)
+router.get('/api/blogs', async (req, res) => {
+  try {
+    res.set('Cache-Control', 'no-store'); // 🔄 Disable caching for fresh data
+    const blogs = await Blog.find().sort({ createdAt: -1 });
+    res.json(blogs);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch blogs' });
+  }
+});
 
-        // Get single blog by ID (frontend detail)
-        router.get('/api/blogs/:id', async (req, res) => {
-          const blog = await Blog.findById(req.params.id);
-            if (!blog) return res.status(404).json({ error: 'Blog not found' });
-              res.json(blog);
-              });
+// Get single blog by ID
+router.get('/api/blogs/:id', async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ error: 'Blog not found' });
+    res.json(blog);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch blog' });
+  }
+});
 
-              // Add comment to blog (frontend)
-              router.post('/api/blogs/:id/comments', async (req, res) => {
-                const { author, text } = req.body;
-                  if (!author || !text) return res.status(400).json({ error: 'Author and text required' });
-                    const blog = await Blog.findById(req.params.id);
-                      if (!blog) return res.status(404).json({ error: 'Blog not found' });
-                        blog.comments.push({ author, text });
-                          await blog.save();
-                            res.json(blog);
-                            });
+// Add comment to blog
+router.post('/api/blogs/:id/comments', async (req, res) => {
+  const { author, text } = req.body;
+  if (!author || !text) return res.status(400).json({ error: 'Author and text required' });
 
-                            // --------- ADMIN ROUTES (server-rendered) ---------
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ error: 'Blog not found' });
 
-                            // Blog management page (admin)
-                            router.get('/blog', async (req, res) => {
-                              const blogs = await Blog.find().sort({ createdAt: -1 });
-                                res.render('blog', { blogs });
-                                });
+    blog.comments.push({ author, text });
+    await blog.save();
 
-                                // Blog form for creating a new blog (admin)
-                                router.get('/blog/new', (req, res) => {
-                                  res.render('blog_form', { blog: {}, action: '/blog/new', button: 'Add Blog' });
-                                  });
+    res.json(blog);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add comment' });
+  }
+});
 
-                                  // Handle new blog POST (admin)
-                                  router.post('/blog/new', upload.single('image'), async (req, res) => {
-                                    const { title, content } = req.body;
-                                      const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
-                                        await Blog.create({ title, content, imageUrl, comments: [] });
-                                          res.redirect('/blog');
-                                          });
+// ========== ADMIN ROUTES (Server-Rendered Views) ==========
 
-                                          // Blog form for editing a blog (admin)
-                                          router.get('/blog/edit/:id', async (req, res) => {
-                                            const blog = await Blog.findById(req.params.id);
-                                              res.render('blog_form', { blog, action: `/blog/edit/${blog._id}`, button: 'Update Blog' });
-                                              });
+// Blog management dashboard
+router.get('/blog', async (req, res) => {
+  const blogs = await Blog.find().sort({ createdAt: -1 });
+  res.render('blog', { blogs });
+});
 
-                                              // Handle blog update POST (admin)
-                                              router.post('/blog/edit/:id', upload.single('image'), async (req, res) => {
-                                                const { title, content } = req.body;
-                                                  let update = { title, content };
-                                                    if (req.file) update.imageUrl = '/uploads/' + req.file.filename;
-                                                      await Blog.findByIdAndUpdate(req.params.id, update);
-                                                        res.redirect('/blog');
-                                                        });
+// Form to create new blog
+router.get('/blog/new', (req, res) => {
+  res.render('blog_form', {
+    blog: {},
+    action: '/blog/new',
+    button: 'Add Blog'
+  });
+});
 
-                                                        // Blog detail page (admin, server-rendered)
-                                                        router.get('/blog/:id', async (req, res) => {
-                                                          const blog = await Blog.findById(req.params.id);
-                                                            if (!blog) return res.status(404).send('Blog not found');
-                                                              res.render('blog_detail', { blog });
-                                                              });
+// Handle creation of new blog
+router.post('/blog/new', upload.single('image'), async (req, res) => {
+  const { title, content } = req.body;
+  const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
+  await Blog.create({ title, content, imageUrl, comments: [] });
+  res.redirect('/blog');
+});
 
-                                                              // Delete blog (admin)
-                                                              router.post('/blog/delete/:id', async (req, res) => {
-                                                                await Blog.findByIdAndDelete(req.params.id);
-                                                                  res.redirect('/blog');
-                                                                  });
+// Form to edit existing blog
+router.get('/blog/edit/:id', async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  res.render('blog_form', {
+    blog,
+    action: `/blog/edit/${blog._id}`,
+    button: 'Update Blog'
+  });
+});
 
-                                                                  module.exports = router;
+// Handle blog update
+router.post('/blog/edit/:id', upload.single('image'), async (req, res) => {
+  const { title, content } = req.body;
+  const update = { title, content };
+
+  if (req.file) {
+    update.imageUrl = '/uploads/' + req.file.filename;
+  }
+
+  await Blog.findByIdAndUpdate(req.params.id, update);
+  res.redirect('/blog');
+});
+
+// Blog detail view (server-rendered)
+router.get('/blog/:id', async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) return res.status(404).send('Blog not found');
+  res.render('blog_detail', { blog });
+});
+
+// Handle blog deletion
+router.post('/blog/delete/:id', async (req, res) => {
+  await Blog.findByIdAndDelete(req.params.id);
+  res.redirect('/blog');
+});
+
+module.exports = router;
