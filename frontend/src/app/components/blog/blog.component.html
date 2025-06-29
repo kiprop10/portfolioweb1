@@ -2,19 +2,27 @@
   <img *ngIf="blog.imageUrl" [src]="blog.imageUrl" alt="Blog Image" />
   <h2>{{ blog.title }}</h2>
   <span class="meta">Posted: {{ blog.createdAt | date:'medium' }}</span>
-  <p>
-    <!-- Show excerpt if not expanded, full content if expanded -->
+
+  <!-- Blog Content Section -->
+  <div class="blog-content">
+    <!-- Show excerpt if not expanded -->
     <ng-container *ngIf="!blog.expanded">
-      {{ blog.content.length > 200 ? (blog.content | slice:0:200) + '...' : blog.content }}
+      <p>
+        {{ blog.content.length > 200 ? (blog.content | slice:0:200) + '...' : blog.content }}
+      </p>
     </ng-container>
+
+    <!-- Show formatted full content if expanded -->
     <ng-container *ngIf="blog.expanded">
-      {{ blog.content }}
+      <div class="full-content" [innerHTML]="formatContent(blog.content)"></div>
     </ng-container>
-  </p>
+  </div>
+
+  <!-- Toggle buttons -->
   <button *ngIf="!blog.expanded" (click)="showDetail(blog)" class="read-more-btn">See More</button>
   <button *ngIf="blog.expanded" (click)="closeDetail(blog)" class="close-btn">Close</button>
 
-  <!-- Blog Detail: Comments and Add Comment, only if expanded -->
+  <!-- Comments Section (only if expanded) -->
   <div *ngIf="blog.expanded" class="blog-detail">
     <h3>Comments</h3>
     <ul>
