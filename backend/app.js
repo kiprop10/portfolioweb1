@@ -18,20 +18,20 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+    useUnifiedTopology: true
+    })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
-// Use routes
-const messageRoutes = require('./routes/messages');
-const blogRoutes = require('./routes/blog'); // Add blog routes
-app.use(messageRoutes);
-app.use(blogRoutes); // Register blog routes
+    // Use routes
+    const messageRoutes = require('./routes/messages');
+    const blogRoutes = require('./routes/blog'); // Add blog routes
+    app.use(messageRoutes);
+    app.use(blogRoutes); // Register blog routes
 
-// Default route (homepage)
-app.get('/', (req, res) => {
-  res.render('index');
-});
+    // Default route (homepage)
+    app.get('/', (req, res) => {
+      res.render('index');
+      });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+      app.listen(3000, () => console.log('Server running on port 3000'));
