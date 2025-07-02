@@ -60,32 +60,12 @@ router.get('/blog', async (req, res) => {
   const blogs = await Blog.find().sort({ createdAt: -1 });
   res.render('blog', { blogs });
 });
-
-// Form to create new blog
-router.get('/blog/new', (req, res) => {
-  res.render('blog_form', {
-    blog: {},
-    action: '/blog/new',
-    button: 'Add Blog'
-  });
-});
-
 // Handle creation of new blog
 router.post('/blog/new', upload.single('image'), async (req, res) => {
   const { title, content } = req.body;
-  const imageUrl = req.file ? '/uploads/' + req.file.filename : '';
+  const imageUrl = req.file ? 'uploads/' + req.file.filename : '';
   await Blog.create({ title, content, imageUrl, comments: [] });
   res.redirect('/blog');
-});
-
-// Form to edit existing blog
-router.get('/blog/edit/:id', async (req, res) => {
-  const blog = await Blog.findById(req.params.id);
-  res.render('blog_form', {
-    blog,
-    action: `/blog/edit/${blog._id}`,
-    button: 'Update Blog'
-  });
 });
 
 // Handle blog update
@@ -94,7 +74,7 @@ router.post('/blog/edit/:id', upload.single('image'), async (req, res) => {
   const update = { title, content };
 
   if (req.file) {
-    update.imageUrl = '/uploads/' + req.file.filename;
+    update.imageUrl = '/uploads' + req.file.filename;
   }
 
   await Blog.findByIdAndUpdate(req.params.id, update);

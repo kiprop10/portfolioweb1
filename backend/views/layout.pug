@@ -55,7 +55,7 @@ html
         background: #fff;
         border-radius: 1.5rem;
         box-shadow: 0 6px 32px #0002;
-        padding: 2.5rem 2rem 2rem 2rem;
+        padding: 2.5rem 2rem;
         flex: 1;
       }
       h1, h2, h3 {
@@ -70,87 +70,31 @@ html
         font-size: 1.4em;
         margin-bottom: 0.5em;
       }
-      /* Blog Management Cards */
-      .blog-card {
-        margin-bottom: 2em;
-        padding: 1.5em 1em;
-        background: linear-gradient(90deg,#f0f9ff 60%,#f0fff4 100%);
-        border-radius: 1em;
-        box-shadow: 0 2px 8px #3b82f611;
-        position: relative;
-      }
-      .blog-card img {
-        max-width: 220px;
-        max-height: 120px;
-        margin-bottom: 0.5em;
-        display: block;
-        border-radius: 0.5em;
-      }
-      .blog-card h2 {
-        margin: 0 0 0.3em 0;
-        color: #a21caf;
-      }
-      .blog-card .meta {
-        color: #888;
-        font-size: 1em;
-      }
-      .blog-card p {
-        margin: 0.7em 0 1em 0;
-      }
-      .blog-card a {
-        margin-right: 1em;
-        font-weight: 500;
-        text-decoration: none;
-      }
-      .blog-card a[href*="edit"] {
-        color: #06b6d4;
-      }
-      .blog-card a[href*="blog/"]:not([href*="edit"]) {
-        color: #a21caf;
-      }
-      .blog-card .delete-btn {
-        background: #ef4444;
-        color: #fff;
-        border: none;
-        border-radius: 0.5em;
-        padding: 0.3em 1em;
-        font-size: 1em;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .blog-card .delete-btn:hover {
-        background: #b91c1c;
-      }
-      /* Blog Form */
-      form[enctype="multipart/form-data"] {
+
+      /* CV & Password Forms */
+      form {
         display: flex;
         flex-direction: column;
         gap: 1.2em;
         max-width: 600px;
+        margin: 0 auto;
       }
       form label {
         font-weight: 500;
         font-size: 1.1em;
       }
       form input[type="text"],
+      form input[type="password"],
+      form input[type="file"],
       form textarea {
         padding: 0.7em 1em;
         border: 2px solid #a5b4fc;
         border-radius: 0.7em;
         font-size: 1.08em;
       }
-      form textarea {
-        min-height: 120px;
-        resize: vertical;
-      }
       form input[type="file"] {
-        margin-bottom: 0.5em;
-      }
-      form img {
-        max-width: 220px;
-        max-height: 120px;
-        border-radius: 0.5em;
-        margin-bottom: 0.5em;
+        background: #fff;
+        border-style: dashed;
       }
       form button[type="submit"] {
         background: linear-gradient(90deg,#a21caf 60%,#f59e42 100%);
@@ -167,51 +111,17 @@ html
       form button[type="submit"]:hover {
         background: linear-gradient(90deg,#f59e42 60%,#a21caf 100%);
       }
-      /* Messages */
-      .message-header {
-        display: flex;
-        align-items: center;
-        gap: 0.7em;
-        margin-bottom: 0.3em;
-      }
-      .name {
-        color: #06b6d4;
-        font-weight: bold;
-        font-size: 1.18em;
-        margin-right: 0.5em;
-      }
-      .contact {
-        color: #a21caf;
+
+      .feedback {
+        margin-top: 1em;
         font-weight: 500;
-        font-size: 1.08em;
-        margin-right: 0.5em;
-      }
-      .content {
-        color: #222;
-        font-size: 1.08em;
-        margin-top: 0.3em;
-        display: block;
-      }
-      .meta {
-        color: #888;
-        font-size: 1em;
-        margin-top: 0.5em;
-        display: block;
-      }
-      .delete-btn {
-        color: #fff;
-        background: #ef4444;
-        border: none;
+        color: #ef4444;
+        background: #fef2f2;
+        padding: 0.8em;
         border-radius: 0.5em;
-        padding: 0.3em 1em;
-        font-size: 1em;
-        cursor: pointer;
-        margin-left: 1em;
-        transition: background 0.2s;
+        text-align: center;
       }
-      .delete-btn:hover {
-        background: #b91c1c;
-      }
+
       footer {
         background: #a21caf;
         color: #fff;
@@ -223,12 +133,12 @@ html
       }
   body
     header
-    
     nav
       a(href="/") Home
       a(href="/messages") Messages
       a(href="/blog") Blog
-      a(href="/login") Login
+      a(href="/admin/upload-cv") Resume
     block content
     footer
       | &copy; #{new Date().getFullYear()} Admin Dashboard
+

@@ -4,15 +4,16 @@
   <span class="meta">Posted: {{ blog.createdAt | date:'medium' }}</span>
 
   <!-- Blog Content Section -->
+   <pre>{{blog.content}}</pre>
   <div class="blog-content">
-    <!-- Show excerpt if not expanded -->
+    <!-- Excerpt (collapsed view) -->
     <ng-container *ngIf="!blog.expanded">
       <p>
         {{ blog.content.length > 200 ? (blog.content | slice:0:200) + '...' : blog.content }}
       </p>
     </ng-container>
 
-    <!-- Show formatted full content if expanded -->
+    <!-- Full formatted content -->
     <ng-container *ngIf="blog.expanded">
       <div class="full-content" [innerHTML]="formatContent(blog.content)"></div>
     </ng-container>
@@ -22,7 +23,7 @@
   <button *ngIf="!blog.expanded" (click)="showDetail(blog)" class="read-more-btn">See More</button>
   <button *ngIf="blog.expanded" (click)="closeDetail(blog)" class="close-btn">Close</button>
 
-  <!-- Comments Section (only if expanded) -->
+  <!-- Comments Section (only when expanded) -->
   <div *ngIf="blog.expanded" class="blog-detail">
     <h3>Comments</h3>
     <ul>

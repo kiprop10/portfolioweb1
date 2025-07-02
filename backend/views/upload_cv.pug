@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h2 Admin Upload CV
+  form(action="/admin/upload-cv" method="POST" enctype="multipart/form-data")
+    input(type="file" name="cv" accept=".pdf" required)
+    button(type="submit") Upload

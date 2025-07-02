@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h2(style="margin-top: 2rem") Download My CV
+  form(action="/verify-cv" method="POST")
+    label(for="password") Password:
+    input(type="password", name="password", required, autofocus)
+    button(type="submit") Download CV
+
+  if error
+    p(style="color: red; margin-top: 1rem") #{error}

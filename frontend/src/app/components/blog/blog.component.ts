@@ -35,10 +35,10 @@ export class BlogComponent implements OnInit {
   public apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
-
   ngOnInit(): void {
-    this.loadBlogs();
-  }
+  console.log('API URL is:', this.apiUrl); // 👈 this line logs it
+  this.loadBlogs();
+}
 
   loadBlogs() {
     this.http.get<Blog[]>(`${this.apiUrl}/api/blogs`).subscribe(blogs => {
@@ -70,13 +70,14 @@ export class BlogComponent implements OnInit {
     });
   }
 
-  // ✅ Format blog content to render images, links, and paragraphs
+  // ✅ Format blog content to render paragraphs, links, and images
+    // filepath: frontend/src/app/components/blog/blog.component.ts
   formatContent(content: string): string {
     if (!content) return '';
-
+  
     let formatted = content
-      // Inline image syntax: [img:/url|caption]
-      .replace(/img:(.*?)\|(.*?)/g, (_, url, caption) => `
+      // Convert [img:/url|caption] to <figure><img /><figcaption></figcaption></figure>
+      .replace(/\[img:([^\|\]]+)\|([^\]]*)\]/g, (_, url, caption) => `
         <figure>
           <img src="${this.apiUrl + url}" alt="${caption}" />
           <figcaption>${caption}</figcaption>
@@ -84,9 +85,9 @@ export class BlogComponent implements OnInit {
       `)
       // Convert links to anchor tags
       .replace(/(https?:\/\/[^\s<]+)/g, url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`)
-      // Replace line breaks with <br>
+      // Convert line breaks to <br>
       .replace(/\n/g, '<br>');
-
+  
     return formatted;
   }
 }
