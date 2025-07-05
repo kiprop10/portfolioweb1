@@ -12,7 +12,7 @@ html
         display: flex;
         flex-direction: column;
         font-size: 1.08em;
-      }     
+      }
       header {
         background: url('/uploads/logo1.png') center/cover no-repeat;
         color: #fff;
@@ -70,8 +70,6 @@ html
         font-size: 1.4em;
         margin-bottom: 0.5em;
       }
-
-      /* CV & Password Forms */
       form {
         display: flex;
         flex-direction: column;
@@ -111,7 +109,6 @@ html
       form button[type="submit"]:hover {
         background: linear-gradient(90deg,#f59e42 60%,#a21caf 100%);
       }
-
       .feedback {
         margin-top: 1em;
         font-weight: 500;
@@ -121,7 +118,23 @@ html
         border-radius: 0.5em;
         text-align: center;
       }
-
+      #cv-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #0008;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      #cv-modal .modal-content {
+        background: #fff;
+        padding: 2em;
+        border-radius: 1em;
+        min-width: 300px;
+        text-align: center;
+        box-shadow: 0 6px 32px #0003;
+      }
       footer {
         background: #a21caf;
         color: #fff;
@@ -137,8 +150,31 @@ html
       a(href="/") Home
       a(href="/messages") Messages
       a(href="/blog") Blog
-      a(href="/admin/upload-cv") Resume
+      a(href="/upload_cv") Resume
+      button#download-cv-btn(type="button" style="margin-left:2rem; background:#a21caf; color:#fff; border:none; border-radius:0.5em; padding:0.5em 1.2em; font-size:1em; cursor:pointer;") Download CV
+
     block content
+
+    //- Modal for password form (server-rendered)
+    #cv-modal
+      .modal-content
+        //- Content will be loaded here
+        div#cv-modal-content
+
     footer
       | &copy; #{new Date().getFullYear()} Admin Dashboard
 
+    script.
+      document.getElementById('download-cv-btn').onclick = async function() {
+        const modal = document.getElementById('cv-modal');
+        const content = document.getElementById('cv-modal-content');
+        // Fetch the server-rendered form
+        const res = await fetch('/cv');
+        const html = await res.text();
+        content.innerHTML = html;
+        modal.style.display = 'flex';
+        // Optional: close modal on background click
+        modal.onclick = function(e) {
+          if (e.target === modal) modal.style.display = 'none';
+        };
+      };

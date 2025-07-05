@@ -21,7 +21,7 @@ const uploadCVRoutes = require('./routes/upload_cv');
 const downloadCVRoutes = require('./routes/download_cv');
 const messageRoutes = require('./routes/messages');
 const blogRoutes = require('./routes/blog');
-
+//const uploadCVRoutes = require('./routes/upload_cv');
 // ✅ Use Routes AFTER Importing
 app.use(uploadCVRoutes);
 app.use(downloadCVRoutes);

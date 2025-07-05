@@ -18,7 +18,7 @@ router.get('/cv', (req, res) => {
     error = 'Unauthorized access. Enter password again.';
   }
 
-  res.render('download_cv', { error });
+  res.render('/download_cv', { error });
 });
 
 // ✅ POST /cv — Validate password, generate token
@@ -26,7 +26,7 @@ router.post('/cv', (req, res) => {
   const { password } = req.body;
 
   if (password !== CV_PASSWORD) {
-    return res.render('download_cv', { error: 'Incorrect password. Try again.' });
+    return res.render('/download_cv', { error: 'Incorrect password. Try again.' });
   }
 
   // Generate short-lived token
