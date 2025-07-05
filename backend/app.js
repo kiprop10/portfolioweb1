@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ✅ Static and View Setup
-app.use('/uploads', express.static(__dirname + '/uploads'));
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
 
