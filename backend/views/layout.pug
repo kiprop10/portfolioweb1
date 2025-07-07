@@ -1,180 +1,188 @@
 doctype html
 html
   head
-    title #{title || 'Admin'}
+    title #{title || 'Kiprop Mutai'}
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     style.
+      * {
+        box-sizing: border-box;
+      }
       body {
         font-family: 'Segoe UI', Arial, sans-serif;
-        background: linear-gradient(120deg, #f3e8ff 0%, #f0fff4 100%);
+        background: linear-gradient(120deg, #f3e8ff, #f0fff4);
         margin: 0;
         padding: 0;
-        min-height: 200vh;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
-        font-size: 1.08em;
-      }
-      header {
-        background: url('/uploads/logo1.png') center/cover no-repeat;
-        color: #fff;
-        padding: 2.2rem 0 1.2rem 0;
-        text-align: center;
-        min-height: 300px;
-        font-size: 2.2em;
-        font-family: 'Playfair Display', serif;
-        letter-spacing: 0.04em;
-        font-weight: 700;
-        text-shadow: 0 2px 12px #a21caf33;
+        font-size: 1.05em;
       }
       nav {
         background: linear-gradient(90deg, #f59e42 0%, #a21caf 100%);
-        padding: 1.1rem 0;
+        padding: 1.2rem 0;
         text-align: center;
-        margin-bottom: 2.2rem;
-        box-shadow: 0 2px 12px #a21caf22;
+        box-shadow: 0 2px 12px #0002;
       }
-      nav a {
+      nav a, nav button {
         color: #fff;
         text-decoration: none;
-        margin: 0 2rem;
-        font-size: 1.18em;
+        margin: 0 1.2rem;
+        font-size: 1.1em;
         font-weight: 600;
-        letter-spacing: 0.03em;
-        transition: color 0.2s, background 0.2s;
-        padding: 0.4em 1em;
+        padding: 0.5em 1em;
         border-radius: 0.5em;
-        display: inline-block;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
       }
-      nav a:hover {
-        color: #a21caf;
+      nav a:hover, nav button:hover {
         background: #fff3e0;
+        color: #a21caf;
       }
       .container {
-        max-width: 1100px;
-        min-width: 500px;
-        margin: 2.5rem auto;
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
         background: #fff;
-        border-radius: 1.5rem;
-        box-shadow: 0 6px 32px #0002;
-        padding: 2.5rem 2rem;
+        border-radius: 1.2rem;
+        box-shadow: 0 6px 20px #0001;
         flex: 1;
       }
       h1, h2, h3 {
         color: #a21caf;
         font-family: 'Playfair Display', serif;
+        margin-top: 0;
       }
-      h1 {
-        font-size: 2.2em;
-        margin-bottom: 0.7em;
-      }
-      h2 {
-        font-size: 1.4em;
-        margin-bottom: 0.5em;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 1.2em;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      form label {
-        font-weight: 500;
-        font-size: 1.1em;
-      }
-      form input[type="text"],
-      form input[type="password"],
-      form input[type="file"],
-      form textarea {
-        padding: 0.7em 1em;
-        border: 2px solid #a5b4fc;
-        border-radius: 0.7em;
-        font-size: 1.08em;
-      }
-      form input[type="file"] {
-        background: #fff;
-        border-style: dashed;
-      }
-      form button[type="submit"] {
-        background: linear-gradient(90deg,#a21caf 60%,#f59e42 100%);
-        color: #fff;
-        border: none;
-        border-radius: 0.7em;
-        padding: 0.7em 2em;
-        font-size: 1.18em;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 2px 12px #a21caf33;
-        transition: background 0.2s;
-      }
-      form button[type="submit"]:hover {
-        background: linear-gradient(90deg,#f59e42 60%,#a21caf 100%);
-      }
-      .feedback {
-        margin-top: 1em;
-        font-weight: 500;
-        color: #ef4444;
-        background: #fef2f2;
-        padding: 0.8em;
-        border-radius: 0.5em;
-        text-align: center;
-      }
+
+      /* ==== Modal Styles ==== */
       #cv-modal {
         display: none;
         position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #0008;
-        z-index: 1000;
-        align-items: center;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.6);
+        z-index: 9999;
         justify-content: center;
+        align-items: center;
       }
       #cv-modal .modal-content {
         background: #fff;
         padding: 2em;
         border-radius: 1em;
         min-width: 300px;
+        box-shadow: 0 12px 32px #0003;
         text-align: center;
-        box-shadow: 0 6px 32px #0003;
       }
+      #cv-modal input[type="password"] {
+        width: 90%;
+        padding: 0.6em;
+        font-size: 1em;
+        border-radius: 0.5em;
+        border: 2px solid #ddd;
+        margin-bottom: 1em;
+      }
+      #cv-modal .error {
+        color: #c00;
+        margin-top: 1em;
+        font-size: 0.95em;
+      }
+      #cv-modal button {
+        margin: 0.5em;
+        padding: 0.5em 1.4em;
+        font-size: 1em;
+        border: none;
+        border-radius: 0.5em;
+        cursor: pointer;
+        background: linear-gradient(90deg, #a21caf, #f59e42);
+        color: #fff;
+        transition: background 0.2s;
+      }
+      #cv-modal button:hover {
+        background: linear-gradient(90deg, #f59e42, #a21caf);
+      }
+
       footer {
         background: #a21caf;
         color: #fff;
         text-align: center;
-        padding: 1rem 0;
-        margin-top: auto;
+        padding: 1.2rem 0;
+        font-size: 1em;
         letter-spacing: 0.04em;
-        font-size: 1.08em;
       }
+
   body
-    header
     nav
       a(href="/") Home
       a(href="/messages") Messages
       a(href="/blog") Blog
-      a(href="/upload_cv") Resume
-      button#download-cv-btn(type="button" style="margin-left:2rem; background:#a21caf; color:#fff; border:none; border-radius:0.5em; padding:0.5em 1.2em; font-size:1em; cursor:pointer;") Download CV
+      button(type="button", id="download-cv-btn") Download CV
 
-    block content
+    .container
+      block content
 
-    //- Modal for password form (server-rendered)
+    // Modal for secure CV download
     #cv-modal
       .modal-content
-        //- Content will be loaded here
-        div#cv-modal-content
+        h3 Enter Password to Download CV
+        input#cv-password(type="password" placeholder="Password")
+        div
+          button(type="button", id="cv-submit-btn") Submit
+          button(type="button", onclick="document.getElementById('cv-modal').style.display='none'") Cancel
+        div#error-msg.error
 
     footer
-      | &copy; #{new Date().getFullYear()} Admin Dashboard
+      | &copy; #{new Date().getFullYear()} Kiprop Mutai
 
+    // Scripts for modal logic + secure download
     script.
-      document.getElementById('download-cv-btn').onclick = async function() {
+      window.onload = function () {
         const modal = document.getElementById('cv-modal');
-        const content = document.getElementById('cv-modal-content');
-        // Fetch the server-rendered form
-        const res = await fetch('/cv');
-        const html = await res.text();
-        content.innerHTML = html;
-        modal.style.display = 'flex';
-        // Optional: close modal on background click
-        modal.onclick = function(e) {
-          if (e.target === modal) modal.style.display = 'none';
+        const openBtn = document.getElementById('download-cv-btn');
+        const submitBtn = document.getElementById('cv-submit-btn');
+        const passwordInput = document.getElementById('cv-password');
+        const errorDiv = document.getElementById('error-msg');
+
+        openBtn.onclick = () => {
+          modal.style.display = 'flex';
+          passwordInput.value = '';
+          errorDiv.innerText = '';
+        };
+
+        submitBtn.onclick = async () => {
+          const password = passwordInput.value;
+          errorDiv.innerText = '';
+          try {
+            const res = await fetch('/cv/password-check', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ password })
+            });
+            if (!res.ok) {
+              const data = await res.json();
+              errorDiv.innerText = data.error || 'Incorrect password';
+              return;
+            }
+            const { token } = await res.json();
+            const downloadRes = await fetch(`/cv/download?token=${token}`);
+            if (!downloadRes.ok) {
+              errorDiv.innerText = 'Download failed.';
+              return;
+            }
+            const blob = await downloadRes.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'KipropMutai-CV.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            modal.style.display = 'none';
+          } catch (err) {
+            errorDiv.innerText = 'Network error. Please try again.';
+          }
         };
       };

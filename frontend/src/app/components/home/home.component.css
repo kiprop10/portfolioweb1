@@ -1,100 +1,111 @@
-/* Container for home section */
 .home-section {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   padding: 4rem 2rem;
-  min-height: 80vh;
-  background-color: #fff;
-  color: #222;
+  background-color: #f9f9f9;
+  gap: 2rem;
 }
 
-/* Text section */
 .home-text {
-  flex: 1;
-  padding-right: 2rem;
+  flex: 1 1 400px;
   max-width: 600px;
 }
 
 .home-text h1 {
   font-size: 2.5rem;
-  font-weight: bold;
   margin-bottom: 1rem;
+  color: #222;
+  font-weight: bold;
 }
 
 .home-text p {
   font-size: 1.1rem;
+  color: #444;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.btn {
-  padding: 0.7rem 1.5rem;
-  background-color: #0056b3;
-  color: #fff;
-  border: none;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background-color: #004494;
-}
-
-/* Image section */
-.home-image {
-  flex: 1;
-  text-align: right;
+/* Group top two buttons */
+.button-row {
   display: flex;
-  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Place CV button slightly lower */
+.cv-row {
+  margin-top: 1rem;
+}
+
+/* Generic button base */
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+}
+
+/* Button variations */
+.see-btn {
+  background-color: #007bff;
+}
+.see-btn:hover {
+  background-color: #0056b3;
+}
+
+.hire-btn {
+  background-color: #28a745;
+}
+.hire-btn:hover {
+  background-color: #1e7e34;
+}
+
+.download-btn {
+  background-color: #6c757d;
+}
+.download-btn:hover {
+  background-color: #5a6268;
+}
+
+.home-image {
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
 .home-image img {
-  width: 260px;
-  height: 260px;
-  object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 6px rgba(0,0,0,0.10);
-  border: 4px solid #fff;
-  background: #eee;
-  transition: border-radius 0.3s, width 0.3s, height 0.3s;
+  max-width: 300px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Responsive Styles */
+/* Responsive behavior */
 @media (max-width: 768px) {
   .home-section {
-    flex-direction: column;
+    flex-direction: column-reverse;
     text-align: center;
-    padding: 2rem 1rem;
   }
 
-  .home-text {
-    padding: 0;
-  }
-
-  .home-image {
+  .button-row {
     justify-content: center;
-    margin-top: 2rem;
-    display: flex;
+    flex-direction: column;
   }
 
-  .home-image img {
-    width: 90vw;
-    max-width: 350px;
-    height: 180px;
-    border-radius: 24px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 6px rgba(0,0,0,0.10);
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 
-  .home-text h1 {
-    font-size: 2rem;
-  }
-
-  .home-text p {
-    font-size: 1rem;
+  .cv-row {
+    margin-top: 0.5rem;
   }
 }

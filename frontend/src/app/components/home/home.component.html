@@ -5,12 +5,39 @@
       I’m a passionate software engineer specializing in building dynamic, responsive, and efficient web applications.
       My goal is to turn ideas into scalable digital solutions with a clean user experience.
     </p>
-    <a routerLink="/portfolio" class="btn">See My Work</a>
-  </div><a [href]="cvDownloadUrl" download target="_blank" rel="noopener noreferrer">
-  <button class="download-btn">Download My CV</button>
-</a>
+    <p>
+      I build full-stack apps using Angular, Node.js, and MongoDB. I’ve created blogs, portfolios, and custom features from scratch — with clean code and mobile-friendly design.
+    </p>
+    <p>
+      Whether it's a landing page, a portfolio, or a full project with backend logic — I enjoy turning challenges into solutions that work beautifully.
+    </p>
+
+    <!-- Top Row Buttons -->
+    <div class="button-row">
+      <a routerLink="/portfolio" class="btn see-btn">See My Work</a>
+      <a href="https://forms.gle/8nepnupXoDnemPoq8" target="_blank" rel="noopener noreferrer" class="btn hire-btn">Hire Me</a>
+    </div>
+
+    <!-- Download CV button below (no direct link) -->
+    <div class="cv-row">
+      <button class="btn download-btn" (click)="openPasswordModal()">Download My CV</button>
+    </div>
+  </div>
 
   <div class="home-image">
     <img src="images/profile1.jpg" alt="Kiprop Mutai profile photo" loading="lazy" />
+  </div>
+
+  <!-- Password Modal -->
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+      <h3>Enter Password to Download CV</h3>
+      <input type="password" [(ngModel)]="cvPassword" placeholder="Password" />
+      <div>
+        <button (click)="submitPassword()">Submit</button>
+        <button (click)="closeModal()">Cancel</button>
+      </div>
+      <div class="error" *ngIf="cvError">{{ cvError }}</div>
+    </div>
   </div>
 </section>

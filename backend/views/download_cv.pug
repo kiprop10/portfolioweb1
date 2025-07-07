@@ -1,7 +1,0 @@
-form(action="/cv" method="POST")
-  label(for="password") Password:
-  input(type="password", name="password", required, autofocus)
-  button(type="submit") Download CV
-
-if error
-  p(style="color: red; margin-top: 1rem") #{error}
