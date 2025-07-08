@@ -28,7 +28,7 @@
     <img src="images/profile1.jpg" alt="Kiprop Mutai profile photo" loading="lazy" />
   </div>
 
-  <!-- Password Modal -->
+  <!-- 🔒 Password Modal -->
   <div class="modal" *ngIf="showModal">
     <div class="modal-content">
       <h3>Enter Password to Download CV</h3>
@@ -41,3 +41,23 @@
     </div>
   </div>
 </section>
+
+<!-- ✅ Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+  <div
+    class="toast align-items-center text-white bg-success border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    #cvToast
+  >
+    <div class="d-flex">
+      <div class="toast-body">{{ cvToastMessage }}</div>
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        (click)="hideToast()"
+      ></button>
+    </div>
+  </div>
+</div>

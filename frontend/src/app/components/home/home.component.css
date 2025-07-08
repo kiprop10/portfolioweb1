@@ -1,79 +1,83 @@
+/* ===== Base Layout ===== */
 .home-section {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   padding: 4rem 2rem;
-  background-color: #f9f9f9;
+  background: linear-gradient(to right, #faf5ff, #f0f9ff);
   gap: 2rem;
 }
 
+/* ===== Text Section ===== */
 .home-text {
   flex: 1 1 400px;
   max-width: 600px;
+  color: #333;
 }
 
 .home-text h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
-  color: #222;
-  font-weight: bold;
+  color: #a21caf;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .home-text p {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: #444;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
 }
 
-/* Group top two buttons */
+/* ===== Buttons ===== */
 .button-row {
   display: flex;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
-/* Place CV button slightly lower */
 .cv-row {
-  margin-top: 1rem;
+  margin-top: 1.2rem;
 }
 
-/* Generic button base */
 .btn {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 8px;
   border: none;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
   color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Button variations */
 .see-btn {
-  background-color: #007bff;
+  background: linear-gradient(to right, #007bff, #00c6ff);
 }
 .see-btn:hover {
-  background-color: #0056b3;
+  background: linear-gradient(to left, #007bff, #00c6ff);
 }
 
 .hire-btn {
-  background-color: #28a745;
+  background: linear-gradient(to right, #28a745, #5dd39e);
 }
 .hire-btn:hover {
-  background-color: #1e7e34;
+  background: linear-gradient(to left, #28a745, #5dd39e);
 }
 
 .download-btn {
-  background-color: #6c757d;
+  background: linear-gradient(to right, #6c757d, #999);
 }
 .download-btn:hover {
-  background-color: #5a6268;
+  background: linear-gradient(to left, #6c757d, #999);
 }
 
+/* ===== Image Section ===== */
 .home-image {
   flex: 1 1 300px;
   display: flex;
@@ -82,17 +86,84 @@
 }
 
 .home-image img {
-  max-width: 300px;
+  max-width: 320px;
   width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
 }
 
-/* Responsive behavior */
+.home-image img:hover {
+  transform: scale(1.02);
+}
+
+/* ===== Modal Styling ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  min-width: 320px;
+  max-width: 90vw;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-content h3 {
+  color: #6c757d;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content input[type="password"] {
+  width: 90%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
+
+.modal-content button {
+  margin: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background: linear-gradient(90deg, #a21caf, #f59e42);
+  color: #fff;
+  transition: background 0.2s ease-in-out;
+}
+
+.modal-content button:hover {
+  background: linear-gradient(90deg, #f59e42, #a21caf);
+}
+
+.error {
+  color: #c00;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .home-section {
     flex-direction: column-reverse;
     text-align: center;
+    padding: 2rem 1rem;
   }
 
   .button-row {
@@ -102,10 +173,14 @@
 
   .btn {
     width: 100%;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
   }
 
   .cv-row {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .home-image img {
+    max-width: 240px;
   }
 }

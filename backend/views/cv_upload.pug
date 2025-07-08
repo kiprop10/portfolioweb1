@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h2 Upload Your CV
+
+  form(method="POST", action="/cv/upload", enctype="multipart/form-data")
+    .form-group
+      label(for="cvFile") Select your CV (PDF only):
+      input(type="file", name="cvFile", id="cvFile", accept=".pdf", required)
+
+    button.btn.btn-primary(type="submit") Upload CV
+
+  // ✅ Toast Message Placeholder
+  #toast.toast(style="display: none;")
+    span Upload successful!
+
+  // ✅ Script to detect ?success=true and show toast
+  script.
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('success') === 'true') {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        toast.classList.add('alert', 'alert-success');
+        setTimeout(() => {
+          toast.style.display = 'none';
+          const url = new URL(window.location);
+          url.searchParams.delete('success');
+          window.history.replaceState({}, document.title, url.pathname);
+        }, 3000);
+      }
+    });
