@@ -47,3 +47,24 @@ body, app-root {
     font-size: 0.95rem;
   }
 }
+
+.service-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Specific color accents */
+.web-icon         { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.termux-icon      { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+.git-icon         { background: linear-gradient(135deg, #667eea, #764ba2); }
+.backend-icon     { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.portfolio-icon   { background: linear-gradient(135deg, #30cfd0, #330867); }
+.mentorship-icon  { background: linear-gradient(135deg, #f7971e, #ffd200); }

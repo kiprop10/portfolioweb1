@@ -32,20 +32,30 @@ interface Blog {
 })
 export class BlogComponent implements OnInit {
   blogs: Blog[] = [];
+  isLoading = false; // 👈 Flag to show spinner
   public apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
+
   ngOnInit(): void {
-  console.log('API URL is:', this.apiUrl); // 👈 this line logs it
-  this.loadBlogs();
-}
+    console.log('API URL is:', this.apiUrl);
+    this.loadBlogs();
+  }
 
   loadBlogs() {
-    this.http.get<Blog[]>(`${this.apiUrl}/api/blogs`).subscribe(blogs => {
-      this.blogs = blogs.map(blog => ({
-        ...blog,
-        imageUrl: blog.imageUrl ? this.apiUrl + blog.imageUrl : ''
-      }));
+    this.isLoading = true; // 👈 Start loading
+    this.http.get<Blog[]>(`${this.apiUrl}/api/blogs`).subscribe({
+      next: blogs => {
+        this.blogs = blogs.map(blog => ({
+          ...blog,
+          imageUrl: blog.imageUrl ? this.apiUrl + blog.imageUrl : ''
+        }));
+        this.isLoading = false; // 👈 Done loading
+      },
+      error: err => {
+        console.error('Error loading blogs:', err);
+        this.isLoading = false; // 👈 Hide spinner on error
+      }
     });
   }
 
@@ -60,6 +70,7 @@ export class BlogComponent implements OnInit {
 
   addComment(blog: Blog) {
     if (!blog.newCommentAuthor || !blog.newCommentText) return;
+
     this.http.post(`${this.apiUrl}/api/blogs/${blog._id}/comments`, {
       author: blog.newCommentAuthor,
       text: blog.newCommentText
@@ -71,13 +82,12 @@ export class BlogComponent implements OnInit {
   }
 
   // ✅ Format blog content to render paragraphs, links, and images
-    // filepath: frontend/src/app/components/blog/blog.component.ts
   formatContent(content: string): string {
     if (!content) return '';
-  
+
     let formatted = content
       // Convert [img:/url|caption] to <figure><img /><figcaption></figcaption></figure>
-      .replace(/\[img:([^\|\]]+)\|([^\]]*)\]/g, (_, url, caption) => `
+      .replace(/img:([^\|]+)\|([^]*)/g, (_, url, caption) => `
         <figure>
           <img src="${this.apiUrl + url}" alt="${caption}" />
           <figcaption>${caption}</figcaption>
@@ -87,7 +97,7 @@ export class BlogComponent implements OnInit {
       .replace(/(https?:\/\/[^\s<]+)/g, url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`)
       // Convert line breaks to <br>
       .replace(/\n/g, '<br>');
-  
+
     return formatted;
   }
 }

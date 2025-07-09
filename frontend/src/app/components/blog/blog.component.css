@@ -1,3 +1,4 @@
+/* 🌟 Blog Card Styling */
 .blog-card {
   margin-bottom: 2.5em;
   padding: 2em 1.5em;
@@ -35,6 +36,8 @@
   color: #333;
   font-size: 1.08em;
 }
+
+/* 📎 Buttons */
 .read-more-btn, .close-btn {
   background: linear-gradient(90deg,#a21caf 60%,#f59e42 100%);
   color: #fff;
@@ -53,6 +56,8 @@
   background: linear-gradient(90deg,#f59e42 60%,#a21caf 100%);
   box-shadow: 0 4px 16px #f59e4233;
 }
+
+/* 💬 Comments */
 .blog-detail {
   background: #f3e8ff;
   border-radius: 1em;
@@ -101,4 +106,57 @@ form button[type="submit"] {
 }
 form button[type="submit"]:hover {
   background: linear-gradient(90deg,#f59e42 60%,#a21caf 100%);
+}
+
+/* 🔄 Spinner Styles */
+.svg-spinner-container {
+  display: flex;
+  justify-content: center;
+  margin: 2em auto;
+}
+.svg-spinner {
+  width: 60px;
+  height: 60px;
+  animation: rotate 1.2s linear infinite;
+}
+.spinner-path {
+  stroke: #a21caf;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite, colorCycle 6s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+@keyframes colorCycle {
+  0%, 100% {
+    stroke: #a21caf;
+  }
+  25% {
+    stroke: #f59e42;
+  }
+  50% {
+    stroke: #2563eb;
+  }
+  75% {
+    stroke: #059669;
+  }
 }

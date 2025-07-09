@@ -1,29 +1,35 @@
+<!-- 🔄 Loading Spinner -->
+<div class="svg-spinner-container" *ngIf="isLoading">
+  <svg class="svg-spinner" viewBox="25 25 50 50">
+    <circle class="spinner-path" cx="50" cy="50" r="20" fill="none" stroke-width="4" />
+  </svg>
+</div>
+
+<!-- 📝 Blog List -->
 <div *ngFor="let blog of blogs" class="blog-card">
   <img *ngIf="blog.imageUrl" [src]="blog.imageUrl" alt="Blog Image" />
   <h2>{{ blog.title }}</h2>
   <span class="meta">Posted: {{ blog.createdAt | date:'medium' }}</span>
 
-  <!-- Blog Content Section -->
-   <pre>{{blog.content}}</pre>
   <div class="blog-content">
-    <!-- Excerpt (collapsed view) -->
+    <!-- Collapsed View -->
     <ng-container *ngIf="!blog.expanded">
       <p>
-        {{ blog.content.length > 200 ? (blog.content | slice:0:200) + '...' : blog.content }}
+        {{ blog.content.length > 200 ? (blog.content | slice: 0:200) + '...' : blog.content }}
       </p>
     </ng-container>
 
-    <!-- Full formatted content -->
+    <!-- Expanded View -->
     <ng-container *ngIf="blog.expanded">
       <div class="full-content" [innerHTML]="formatContent(blog.content)"></div>
     </ng-container>
   </div>
 
-  <!-- Toggle buttons -->
+  <!-- Toggle Buttons -->
   <button *ngIf="!blog.expanded" (click)="showDetail(blog)" class="read-more-btn">See More</button>
   <button *ngIf="blog.expanded" (click)="closeDetail(blog)" class="close-btn">Close</button>
 
-  <!-- Comments Section (only when expanded) -->
+  <!-- Comments Section -->
   <div *ngIf="blog.expanded" class="blog-detail">
     <h3>Comments</h3>
     <ul>
