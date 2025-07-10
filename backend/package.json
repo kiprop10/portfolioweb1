@@ -14,7 +14,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.8.7",
     "multer": "^2.0.1",
+    "ngx-quill": "^28.0.1",
     "nodemon": "^3.1.10",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "quill": "^2.0.3"
   }
 }

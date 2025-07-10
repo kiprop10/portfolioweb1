@@ -15,13 +15,14 @@
     <!-- Collapsed View -->
     <ng-container *ngIf="!blog.expanded">
       <p>
+        <!-- Show a short preview as plain text -->
         {{ blog.content.length > 200 ? (blog.content | slice: 0:200) + '...' : blog.content }}
       </p>
     </ng-container>
 
     <!-- Expanded View -->
     <ng-container *ngIf="blog.expanded">
-      <div class="full-content" [innerHTML]="formatContent(blog.content)"></div>
+      <div class="full-content" [innerHTML]="blog.safeContent"></div>
     </ng-container>
   </div>
 

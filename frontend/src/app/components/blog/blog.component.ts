@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 
 interface BlogComment {
@@ -21,6 +22,7 @@ interface Blog {
   expanded?: boolean;
   newCommentAuthor?: string;
   newCommentText?: string;
+  safeContent?: SafeHtml; // 👈 Add this for sanitized content
 }
 
 @Component({
@@ -32,29 +34,29 @@ interface Blog {
 })
 export class BlogComponent implements OnInit {
   blogs: Blog[] = [];
-  isLoading = false; // 👈 Flag to show spinner
+  isLoading = false;
   public apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
-    console.log('API URL is:', this.apiUrl);
     this.loadBlogs();
   }
 
   loadBlogs() {
-    this.isLoading = true; // 👈 Start loading
+    this.isLoading = true;
     this.http.get<Blog[]>(`${this.apiUrl}/api/blogs`).subscribe({
       next: blogs => {
         this.blogs = blogs.map(blog => ({
           ...blog,
-          imageUrl: blog.imageUrl ? this.apiUrl + blog.imageUrl : ''
+          imageUrl: blog.imageUrl ? this.apiUrl + blog.imageUrl : '',
+          safeContent: this.sanitizer.bypassSecurityTrustHtml(blog.content || '')
         }));
-        this.isLoading = false; // 👈 Done loading
+        this.isLoading = false;
       },
       error: err => {
         console.error('Error loading blogs:', err);
-        this.isLoading = false; // 👈 Hide spinner on error
+        this.isLoading = false;
       }
     });
   }
@@ -79,25 +81,5 @@ export class BlogComponent implements OnInit {
       blog.newCommentAuthor = '';
       blog.newCommentText = '';
     });
-  }
-
-  // ✅ Format blog content to render paragraphs, links, and images
-  formatContent(content: string): string {
-    if (!content) return '';
-
-    let formatted = content
-      // Convert [img:/url|caption] to <figure><img /><figcaption></figcaption></figure>
-      .replace(/img:([^\|]+)\|([^]*)/g, (_, url, caption) => `
-        <figure>
-          <img src="${this.apiUrl + url}" alt="${caption}" />
-          <figcaption>${caption}</figcaption>
-        </figure>
-      `)
-      // Convert links to anchor tags
-      .replace(/(https?:\/\/[^\s<]+)/g, url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`)
-      // Convert line breaks to <br>
-      .replace(/\n/g, '<br>');
-
-    return formatted;
   }
 }
