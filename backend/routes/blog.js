@@ -3,6 +3,7 @@ const router = express.Router();
 const Blog = require('../models/blog');
 const multer = require('multer');
 const path = require('path');
+const sanitizeHtml = require('sanitize-html');
 
 // === Multer Setup for Image Uploads ===
 const storage = multer.diskStorage({
@@ -81,8 +82,21 @@ router.post('/blog/new', upload.single('image'), async (req, res) => {
     if (!title || !content) {
       return res.status(400).send('Title and content are required.');
     }
-    const imageUrl = req.file ? 'uploads/' + req.file.filename : '';
-    await Blog.create({ title, content, imageUrl, comments: [] });
+
+    const cleanContent = sanitizeHtml(content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'u']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        img: ['src', 'alt', 'style'],
+        '*': ['style']
+      }
+    });
+
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+      : '';
+
+    await Blog.create({ title, content: cleanContent, imageUrl, comments: [] });
     res.redirect('/blog');
   } catch (err) {
     console.error('Error creating blog:', err);
@@ -106,7 +120,7 @@ router.get('/blog/edit/:id', async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).send('Blog not found');
-    res.render('blog-form', {
+    res.render('blog_form', {
       blog,
       action: `/blog/edit/${blog._id}`,
       button: 'Update Blog'
@@ -120,10 +134,18 @@ router.get('/blog/edit/:id', async (req, res) => {
 router.post('/blog/edit/:id', upload.single('image'), async (req, res) => {
   try {
     const { title, content } = req.body;
-    const update = { title, content };
+    const cleanContent = sanitizeHtml(content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'u']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        img: ['src', 'alt', 'style'],
+        '*': ['style']
+      }
+    });
 
+    const update = { title, content: cleanContent };
     if (req.file) {
-      update.imageUrl = 'uploads/' + req.file.filename;
+      update.imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
 
     await Blog.findByIdAndUpdate(req.params.id, update);

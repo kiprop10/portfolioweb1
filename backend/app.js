@@ -12,6 +12,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// ✅ Serve uploaded images publicly
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // ✅ Static and View Setup
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');

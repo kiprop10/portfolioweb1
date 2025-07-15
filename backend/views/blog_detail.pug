@@ -4,9 +4,16 @@ block content
   .container
     h1= blog.title
     if blog.imageUrl
-      img(src=blog.imageUrl, alt="Blog Image", style="max-width:320px;max-height:200px;margin-bottom:1em;display:block;border-radius:0.5em;")
+      img(
+        src=blog.imageUrl, 
+        alt="Blog Image", 
+        style="max-width:320px;max-height:200px;margin-bottom:1em;display:block;border-radius:0.5em;"
+      )
     span.meta Posted: #{blog.createdAt.toLocaleString()}
-    p= blog.content
+    
+    // 🔥 Render rich HTML content (images, headings, formatting)
+    div!= blog.content
+
     if blog.comments && blog.comments.length
       h3(style="margin-top:2em;") Comments
       ul

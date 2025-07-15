@@ -7,15 +7,24 @@
 
 <!-- 📝 Blog List -->
 <div *ngFor="let blog of blogs" class="blog-card">
-  <img *ngIf="blog.imageUrl" [src]="blog.imageUrl" alt="Blog Image" />
+  <!-- 🖼️ Blog Image -->
+  <img
+  *ngIf="blog.imageUrl"
+  [src]="blog.imageUrl"
+  alt="Blog Image"
+  class="blog-image"
+  (error)="blog.imageUrl = ''"
+/>
+
+  <!-- 📝 Title & Meta -->
   <h2>{{ blog.title }}</h2>
   <span class="meta">Posted: {{ blog.createdAt | date:'medium' }}</span>
 
+  <!-- 📄 Blog Content -->
   <div class="blog-content">
     <!-- Collapsed View -->
     <ng-container *ngIf="!blog.expanded">
       <p>
-        <!-- Show a short preview as plain text -->
         {{ blog.content.length > 200 ? (blog.content | slice: 0:200) + '...' : blog.content }}
       </p>
     </ng-container>
@@ -26,11 +35,24 @@
     </ng-container>
   </div>
 
-  <!-- Toggle Buttons -->
-  <button *ngIf="!blog.expanded" (click)="showDetail(blog)" class="read-more-btn">See More</button>
-  <button *ngIf="blog.expanded" (click)="closeDetail(blog)" class="close-btn">Close</button>
+  <!-- 🔁 Toggle Buttons -->
+  <button
+    *ngIf="!blog.expanded"
+    (click)="showDetail(blog)"
+    class="read-more-btn"
+  >
+    See More
+  </button>
 
-  <!-- Comments Section -->
+  <button
+    *ngIf="blog.expanded"
+    (click)="closeDetail(blog)"
+    class="close-btn"
+  >
+    Close
+  </button>
+
+  <!-- 💬 Comments Section -->
   <div *ngIf="blog.expanded" class="blog-detail">
     <h3>Comments</h3>
     <ul>
@@ -39,9 +61,21 @@
         <span class="meta">{{ comment.createdAt | date:'short' }}</span>
       </li>
     </ul>
+
+    <!-- ✍️ Comment Form -->
     <form (ngSubmit)="addComment(blog)">
-      <input [(ngModel)]="blog.newCommentAuthor" name="author{{blog._id}}" placeholder="Your name" required />
-      <input [(ngModel)]="blog.newCommentText" name="text{{blog._id}}" placeholder="Add a comment..." required />
+      <input
+        [(ngModel)]="blog.newCommentAuthor"
+        name="author{{ blog._id }}"
+        placeholder="Your name"
+        required
+      />
+      <input
+        [(ngModel)]="blog.newCommentText"
+        name="text{{ blog._id }}"
+        placeholder="Add a comment..."
+        required
+      />
       <button type="submit">Add Comment</button>
     </form>
   </div>

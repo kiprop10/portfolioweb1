@@ -1,0 +1,40 @@
+.service-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  font-size: 28px;
+  color: white;
+}
+
+/* Individual icon backgrounds */
+.icon-web {
+  background-color: #4caf50; /* Green */
+}
+
+.icon-terminal {
+  background-color: #546e7a; /* Terminal gray */
+}
+
+.icon-git {
+  background-color: #f1502f; /* Git orange */
+}
+
+.icon-db {
+  background-color: #7e57c2; /* Purple (MongoDB-style) */
+}
+
+.icon-badge {
+  background-color: #03a9f4; /* Light blue */
+}
+
+.icon-bug {
+  background-color: #e91e63; /* Pink/Red for bugs */
+}
+
+.icon-shield {
+  background-color: #607d8b; /* Blue gray */
+}
